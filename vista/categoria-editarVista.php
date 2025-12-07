@@ -1,15 +1,29 @@
 <?php
-
-require_once ("../Controlador/CategoriaControlador.php");
-
+require_once("../Controlador/CategoriaControlador.php");
 
 $control = new CategoriaControlador();
+
+// SI ENVÍA FORMULARIO
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $id = $_POST["idCategoria"];
+    $nombre = $_POST["nombre"];
+    $descripcion = $_POST["descripcion"];
+    $idEstado = $_POST["idEstado"];
+
+    if ($control->actualizar($id, $nombre, $descripcion, $idEstado)) {
+        header("Location: categoriaVista.php?success=edit");
+        exit;
+    }
+}
+
+// SI ES GET
 $categoria = $control->editar($_GET["id"]);
 ?>
 
 <h2>Editar Categoría</h2>
 
-<form action="categoria_actualizar.php" method="POST">
+<form action="categoria-editarVista.php" method="POST">
 
     <input type="hidden" name="idCategoria" value="<?= $categoria['idCategoria'] ?>">
 

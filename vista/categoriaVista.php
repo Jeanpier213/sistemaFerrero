@@ -1,36 +1,53 @@
 <?php
-
-require_once ("../Controlador/CategoriaControlador.php");
+require_once("../Controlador/CategoriaControlador.php");
 
 $control = new CategoriaControlador();
 
-// Obtener columnas automáticamente
+// BUSCAR
+if (isset($_POST["buscar"])) {
+    $categorias = $control->buscar($_POST["buscar"]);
+} else {
+    $categorias = $control->listar();
+}
+
+// COLUMNAS
 $columnas = $control->obtenerColumnas();
 
-// Obtener categorías
-$categorias = $control->listar();
+// GUARDAR
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
+
+    $nombre = $_POST["nombre"];
+    $descripcion = $_POST["descripcion"];
+    $idEstado = $_POST["idEstado"];
+
+    if ($control->guardar($nombre, $descripcion, $idEstado)) {
+        header("Location: categoriaVista.php?success=1");
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Gestión de Categorías</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 8px; border: 1px solid black; }
-    </style>
 </head>
 <body>
 
-<h2>Listado de Categorías</h2>
+<h2>Buscar Categoría</h2>
+<form method="POST">
+    <input type="text" name="buscar" placeholder="Buscar...">
+    <button type="submit">Buscar</button>
+</form>
+<br>
 
 <?php if (isset($_GET['success'])): ?>
-    <p style="color: green;">Registro guardado correctamente</p>
+    <p style="color: green;">Categoría guardada correctamente</p>
 <?php endif; ?>
 
 <h2>Agregar Categoría</h2>
 
-<form action="categoriaVista .php" method="POST">
+<form action="categoriaVista.php" method="POST">
 
     <label>Nombre:</label>
     <input type="text" name="nombre" required><br><br>
@@ -45,7 +62,7 @@ $categorias = $control->listar();
 
 </form>
 
-<br>
+<br><br>
 
 <table border="1">
     <tr>
@@ -56,17 +73,16 @@ $categorias = $control->listar();
 
     <?php foreach ($categorias as $c): ?>
         <tr>
-            <!-- Enlace para editar -->
             <td>
-                <a href="categoria_editar.php?id=<?= $c['idCategoria'] ?>">
+                <a href="categoria-editarVista.php?id=<?= $c['idCategoria'] ?>">
                     <?= $c['idCategoria'] ?>
                 </a>
             </td>
 
-            <!-- Imprime todas las columnas excepto la primera -->
             <?php foreach (array_slice($columnas, 1) as $col): ?>
                 <td><?= $c[$col] ?></td>
             <?php endforeach; ?>
+
         </tr>
     <?php endforeach; ?>
 </table>
