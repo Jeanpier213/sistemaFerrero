@@ -4,6 +4,7 @@ require_once("../Controlador/CategoriaControlador.php");
 $control = new CategoriaControlador();
 
 // BUSCAR
+$texto = $_POST["buscar"] ?? "";
 if (isset($_POST["buscar"])) {
     $categorias = $control->buscar($_POST["buscar"]);
 } else {
@@ -31,21 +32,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 <html>
 <head>
     <title>Gestión de Categorías</title>
+    <link 
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+  rel="stylesheet" > 
+
 </head>
 <body>
+  
+       
 
-<h2>Buscar Categoría</h2>
-<form method="POST">
-    <input type="text" name="buscar" placeholder="Buscar...">
-    <button type="submit">Buscar</button>
-</form>
+<h1><b>Categorias</b></h1>
+
+<input type="text" id="buscar" placeholder="Buscar producto..." autocomplete="off">
+
+
+
 <br>
 
 <?php if (isset($_GET['success'])): ?>
     <p style="color: green;">Categoría guardada correctamente</p>
 <?php endif; ?>
 
-<h2>Agregar Categoría</h2>
+<div>
+
 
 <form action="categoriaVista.php" method="POST">
 
@@ -58,13 +67,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     <label>ID Estado:</label>
     <input type="number" name="idEstado" required><br><br>
 
-    <button type="submit">Guardar Categoría</button>
+    <button type="submit">Agregar</button>
 
 </form>
+</div>
 
-<br><br>
+<div>
 
-<table border="1">
+<table id="tablaProductos" border="1">
     <tr>
         <?php foreach ($columnas as $col): ?>
             <th><?= $col ?></th>
@@ -86,6 +96,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
         </tr>
     <?php endforeach; ?>
 </table>
+</div>
+
+<script>
+let input = document.getElementById("buscar");
+let tabla = document.getElementById("tablaProductos");
+
+input.onkeyup = function() {
+    let texto = input.value.toLowerCase();
+    let filas = tabla.getElementsByTagName("tr");
+
+    for (let i = 1; i < filas.length; i++) { 
+        let filaTexto = filas[i].innerText.toLowerCase();
+        
+        if (filaTexto.indexOf(texto) > -1) {
+            filas[i].style.display = "";
+        } else {
+            filas[i].style.display = "none";
+        }
+    }
+};
+</script>
+
 
 </body>
 </html>
