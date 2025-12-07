@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$dbname = "tu_basedatos";
+$dbname = "ferreteriasantos_db";
 $user = "root";
 $pass = ""; // tu contraseña si tiene
 
