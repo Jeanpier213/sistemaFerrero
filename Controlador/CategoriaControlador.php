@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "../Modelo/categoria.php";
+require_once  ("../Modelo/categoria.php");
 
 class CategoriaControlador {
 

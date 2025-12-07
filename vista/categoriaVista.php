@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "../Controlador/CategoriaControlador.php";
+require_once ("../Controlador/CategoriaControlador.php");
 
 $control = new CategoriaControlador();
 
@@ -30,7 +30,7 @@ $categorias = $control->listar();
 
 <h2>Agregar Categoría</h2>
 
-<form action="categoria_guardar.php" method="POST">
+<form action="categoriaVista .php" method="POST">
 
     <label>Nombre:</label>
     <input type="text" name="nombre" required><br><br>

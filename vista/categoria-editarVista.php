@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ ."../Controlador/CategoriaControlador.php";
+require_once ("../Controlador/CategoriaControlador.php");
 
 
 $control = new CategoriaControlador();

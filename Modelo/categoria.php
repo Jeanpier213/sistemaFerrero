@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../Configuraciones/bd.php";
+require_once ("../Configuraciones/bd.php");
 
 
 class Categoria {

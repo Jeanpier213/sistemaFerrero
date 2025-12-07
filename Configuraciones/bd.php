@@ -1,21 +1,31 @@
 <?php
-$host = "localhost";
-$dbname = "ferreteriasantos_db";
-$user = "root";
-$pass = ""; // tu contraseña si tiene
 
 class bd {
+
+    private $servidor = "localhost";
+    private $basedatos = "ferreteriasantos_db";
+    private $usuario = "root";
+    private $clave = "";
+    private $puerto = "3306";
+
     public function conexion() {
-        global $host, $dbname, $user, $pass;
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
-     return $pdo;
+        try {
 
-} catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
-}
-}
-}
+            $dsn = "mysql:host=" . $this->servidor . 
+                   ";dbname=" . $this->basedatos . 
+                   ";port=" . $this->puerto .
+                   ";charset=utf8mb4";
 
+            $conexion = new PDO($dsn, $this->usuario, $this->clave);
+
+        
+
+            return $conexion;
+
+        } catch (PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
+        }
+    }
+}
 
 ?>
