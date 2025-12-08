@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["conectar"])) {
             $_SESSION["clave"] = $clave;
             $_SESSION["BD"] = $bd;
 
-            header('Location: ingreso_productos_controlador.php');
+            header('Location: ../Template/Menu.php');
             exit();
         }
     } catch (Exception $e) {
@@ -30,4 +30,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["conectar"])) {
 }
 
 require_once __DIR__ . '/../Vista/login_vista.php';
+
 ?>
