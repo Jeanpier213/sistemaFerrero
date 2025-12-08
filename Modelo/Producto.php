@@ -44,7 +44,7 @@ class Producto {
         return $sql->execute([$nombre, $unidad, $tipo, $cantidad, $fecha, $precioRef, $precioVenta, $umbral, $idCategoria, $idEstado, $id]);
     }
 
-    // FUNCION PARA CAMBIAR SOLO EL ESTADO
+    // --- NUEVO: FUNCION PARA CAMBIAR SOLO EL ESTADO ---
     public function cambiarEstado($id, $nuevoEstado) {
         $sql = $this->pdo->prepare("UPDATE producto SET idEstado = ? WHERE idProducto = ?");
         return $sql->execute([$nuevoEstado, $id]);
