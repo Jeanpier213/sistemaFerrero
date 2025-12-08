@@ -23,7 +23,7 @@
         <nav class="nav flex-column mb-auto">
             <a class="nav-link" href="menu.php?page=inicio"><i class="bi bi-house-door"></i> Inicio</a>
             <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
-            <a class="nav-link" href="menu.php?page=inventario"><i class="bi bi-box-seam"></i> Inventario</a>
+            <a class="nav-link" href="menu.php?page=inventario"><i class="bi-clipboard-plus"></i> Inventario</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
             <a class="nav-link" href="menu.php?page=clientes"><i class="bi bi-people"></i> Clientes</a>
             <a class="nav-link" href="menu.php?page=ventas"><i class="bi bi-cart"></i> Ventas</a>
