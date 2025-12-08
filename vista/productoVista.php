@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Controlador/ProductoControlador.php';
+require_once __DIR__ . '/../Controlador/productoControlador.php';
 
 $control = new ProductoControlador();
 
@@ -158,3 +158,4 @@ input.onkeyup = function() {
 
 </body>
 </html>
+
