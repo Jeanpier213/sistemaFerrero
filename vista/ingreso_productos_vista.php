@@ -79,7 +79,7 @@
 
             <div class="acciones">
                 <button type="button" class="btn-add" onclick="editarProductoSeleccionado()" style="btn-add">
-                    Editar Producto Seleccionado
+                    Editar Productos
                 </button>
                 
                 <button type="submit" name="guardar" class="btn-save">Registrar Ingreso</button>
@@ -89,4 +89,5 @@
 </body>
 
 </html>
+
 
