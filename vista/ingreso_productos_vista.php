@@ -9,7 +9,7 @@
                     var idProducto = selects[0].value;
                     
                     if (idProducto) {
-                        window.location.href = '../Vista/editarProductoVista.php?id=' + idProducto;
+                        window.location.href = '../Vista/productoVista.php?id=' + idProducto;
                     } else {
                         alert("Por favor, seleccione un producto válido primero.");
                     }
@@ -89,3 +89,4 @@
 </body>
 
 </html>
+
