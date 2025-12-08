@@ -6,7 +6,7 @@
 
     <div class="contenedor-metalico">
         <div class="cabecera-cobre">
-            <h2>Acceso a Base de Datos</h2>
+            <h2>Acceso al sistema de Ferreteria Santos</h2>
         </div>
 
         <?php if (!empty($mensajeError)): ?>
@@ -47,3 +47,4 @@
 </body>
 
 </html>
+
