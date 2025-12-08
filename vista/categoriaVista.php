@@ -32,10 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 <html>
 <head>
     <title>Gestión de Categorías</title>
-    <link 
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-  rel="stylesheet" > 
-
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../style/menu.css">
 </head>
 <body>
   
