@@ -1,6 +1,6 @@
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="../Styles/login_estilos.css">
+    <link rel="stylesheet" href="../Style/login_estilos.css">
 </head>
 <body>
 
