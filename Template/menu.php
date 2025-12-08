@@ -8,143 +8,67 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        /* Estilos mínimos para asegurar que el menú ocupe toda la altura */
-        html, body {
-            height: 100%;
-            overflow-x: hidden; 
-        }
-        .min-vh-100 {
-            min-height: 100vh !important;
-        }
-        .nav-link {
-            color: rgba(255,255,255,0.85);
-            margin-bottom: 5px;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: #fff;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 5px;
-        }
-        .bg-sidebar {
-            background-color: #212529; /* Color oscuro (Dark) */
-        }
+        body { min-height: 100vh; display: flex; overflow-x: hidden; }
+        .sidebar { min-width: 250px; max-width: 250px; background: #212529; color: white; display: flex; flex-direction: column; min-height: 100vh; }
+        .content { flex: 1; background: #f8f9fa; display: flex; flex-direction: column; }
+        .nav-link { color: rgba(255,255,255,.8); margin-bottom: 5px; }
+        .nav-link:hover, .nav-link.active { color: #fff; background: rgba(255,255,255,.1); border-radius: 5px; }
     </style>
 </head>
 <body>
 
-<div class="container-fluid">
-    <div class="row flex-nowrap">
-        
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-sidebar min-vh-100 d-flex flex-column justify-content-between">
-            
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3 text-white min-vh-100">
-                
-                <a href="menu.php" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline fw-bold">🛠️ Ferretería</span>
-                </a>
-                
-                <hr class="text-white w-100">
+    <div class="sidebar p-3">
+        <h4 class="text-center mb-4">🛠️ Ferretería</h4>
+        <hr>
+        <nav class="nav flex-column mb-auto">
+            <a class="nav-link" href="menu.php?page=inicio"><i class="bi bi-house-door"></i> Inicio</a>
+            <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
+            <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
+            <a class="nav-link" href="menu.php?page=clientes"><i class="bi bi-people"></i> Clientes</a>
+            <a class="nav-link" href="menu.php?page=ventas"><i class="bi bi-cart"></i> Ventas</a>
+            <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
+        </nav>
+        <small class="text-center text-muted mt-auto">© 2025 Sistema</small>
+    </div>
 
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
-                    
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=inicio" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-house-door"></i> <span class="ms-1 d-none d-sm-inline">Inicio</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=productos" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-box-seam"></i> <span class="ms-1 d-none d-sm-inline">Productos</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=categorias" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-tags"></i> <span class="ms-1 d-none d-sm-inline">Categorías</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=clientes" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Clientes</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=ventas" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-cart"></i> <span class="ms-1 d-none d-sm-inline">Ventas</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=reportes" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-bar-chart"></i> <span class="ms-1 d-none d-sm-inline">Reportes</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item w-100">
-                        <a href="menu.php?page=configuracion" class="nav-link align-middle px-0 ps-2">
-                            <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Configuración</span>
-                        </a>
-                    </li>
-                </ul>
-                
-                <hr class="text-white w-100">
-                
-                <div class="pb-4 w-100">
-                    <a href="../Controlador/logout.php" class="nav-link text-danger px-0 ps-2">
-                        <i class="fs-4 bi-box-arrow-left"></i> <span class="ms-1 d-none d-sm-inline">Cerrar Sesión</span>
-                    </a>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="col py-3 bg-light">
-            
+    <div class="content">
+        <main class="p-4">
             <?php
-            // Lógica para cargar las vistas dinámicamente
             $page = isset($_GET['page']) ? $_GET['page'] : 'inicio';
 
             switch ($page) {
+                // RUTA: PRODUCTOS (LISTA)
                 case 'productos':
-                    // Verifica la ruta: ../vista/productoVista.php
                     $ruta = __DIR__ . "/../vista/productoVista.php";
-                    if (file_exists($ruta)) {
-                        include_once $ruta;
-                    } else {
-                        // Mensaje de error bonito si no encuentra el archivo
-                        echo '<div class="alert alert-danger shadow-sm m-4" role="alert">
-                                <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Archivo no encontrado</h4>
-                                <p>El sistema intentó cargar <strong>../vista/productoVista.php</strong> pero no existe.</p>
-                                <hr>
-                                <p class="mb-0">Verifica que el nombre del archivo en la carpeta "vista" sea exactamente igual.</p>
-                              </div>';
-                    }
+                    if (file_exists($ruta)) include_once $ruta;
+                    else echo "<div class='alert alert-danger'>No se encuentra: $ruta</div>";
                     break;
 
+                // RUTA: EDITAR PRODUCTO (NUEVA)
+                case 'editar':
+                    $ruta = __DIR__ . "/../vista/editarProductoVista.php";
+                    if (file_exists($ruta)) include_once $ruta;
+                    else echo "<div class='alert alert-danger'>No se encuentra: $ruta</div>";
+                    break;
+
+                // RUTA: CATEGORIAS
                 case 'categorias':
                     $ruta = __DIR__ . "/../vista/categoriaVista.php";
                     if (file_exists($ruta)) include_once $ruta;
-                    else echo '<div class="alert alert-warning m-4">La vista de Categorías aún no ha sido creada.</div>';
                     break;
-                
+
                 case 'inicio':
                 default:
-                    // PANTALLA DE BIENVENIDA
-                    echo '<div class="p-5 mb-4 bg-white rounded-3 shadow-sm m-3">
-                            <div class="container-fluid py-5">
-                              <h1 class="display-5 fw-bold text-primary">Bienvenido al Panel</h1>
-                              <p class="col-md-8 fs-4">Selecciona una opción del menú lateral para comenzar a gestionar tu ferretería.</p>
-                              <button class="btn btn-primary btn-lg" type="button" onclick="location.href=\'?page=productos\'">Ir a Productos</button>
-                            </div>
-                          </div>';
+                    echo "<div class='p-5 bg-white shadow-sm rounded'>
+                            <h1>Bienvenido al Panel</h1>
+                            <p>Selecciona una opción del menú.</p>
+                        </div>";
                     break;
             }
             ?>
-            
-        </div> </div> </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        </main>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
