@@ -43,8 +43,13 @@
             </button>
         </form>
     </div>
+        <div class="text-center mt-3">
+    <a href="usuarioVista.php" style="color: black; text-decoration: underline;">
+        ¿No tienes cuenta? Regístrate aquí
+    </a>
 
 </body>
 
 </html>
+
 
