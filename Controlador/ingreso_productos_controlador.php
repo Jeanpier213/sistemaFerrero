@@ -1,66 +1,44 @@
 <?php
-session_start();
-
-if (!isset($_SESSION["servidor"])) {
-    header("Location: login_controlador.php");
-    exit();
-}
-
 require_once __DIR__ . '/../Modelo/ingreso_productos_modelo.php';
 
-$mensaje = "";
-$tipoMensaje = "";
-$modelo = null;
+class IngresoProductoControlador {
 
-try {
-    $modelo = new IngresoProductosModelo();
+    private $modelo;
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guardar"])) {
-        $proveedor = $_POST['proveedor'];
-        $trabajador = $_POST['trabajador'];
-        $productos = $_POST['prods_id'];
-        $cantidades = $_POST['prods_cant'];
-        $precios = $_POST['prods_precio'];
+    public function __construct() {
+        $this->modelo = new IngresoProducto();
+    }
 
+    public function obtenerProveedores() {
+        return $this->modelo->obtenerProveedores();
+    }
+
+    public function obtenerTrabajadores() {
+        return $this->modelo->obtenerTrabajadores();
+    }
+
+    public function obtenerProductos() {
+        return $this->modelo->obtenerProductos();
+    }
+
+    public function guardarIngreso($idProveedor, $idTrabajador, $productosIds, $cantidades, $precios) {
         $detalles = [];
-        for ($i = 0; $i < count($productos); $i++) {
-            if ($cantidades[$i] > 0) {
+        
+        for ($i = 0; $i < count($productosIds); $i++) {
+            if ($cantidades[$i] > 0 && !empty($productosIds[$i])) {
                 $detalles[] = [
-                    'idProducto' => $productos[$i],
-                    'cantidad' => $cantidades[$i],
-                    'precio' => $precios[$i]
+                    'idProducto' => $productosIds[$i],
+                    'cantidad'   => $cantidades[$i],
+                    'precio'     => $precios[$i]
                 ];
             }
         }
 
-        if (!empty($detalles)) {
-            $modelo->registrarIngreso($proveedor, $trabajador, $detalles);
-            $mensaje = "Ingreso registrado correctamente.";
-            $tipoMensaje = "exito";
-        } else {
-            $mensaje = "Añada al menos un producto.";
-            $tipoMensaje = "error";
+        if (empty($detalles)) {
+            return false;
         }
-    }
 
-    $proveedores = $modelo->obtenerProveedores();
-    $trabajadores = $modelo->obtenerTrabajadores();
-    $listaProductos = $modelo->obtenerProductos();
-
-} catch (Exception $e) {
-    $mensaje = "Error: " . $e->getMessage();
-    $tipoMensaje = "error";
-    if(strpos($e->getMessage(), "Error al reconectar") !== false){
-        header("Location: login_controlador.php");
-        exit;
+        return $this->modelo->registrarIngreso($idProveedor, $idTrabajador, $detalles);
     }
 }
-
-if (isset($_POST['logout'])) {
-    session_destroy();
-    header("Location: login_controlador.php");
-    exit();
-}
-
-require_once __DIR__ . '/../Vista/ingreso_productos_vista.php';
 ?>
