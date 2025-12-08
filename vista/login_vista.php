@@ -1,6 +1,6 @@
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="../Styles/login_estilos.css">
+    <link rel="stylesheet" href="../style/login_estilos.css">
 </head>
 <body>
 
@@ -45,4 +45,5 @@
     </div>
 
 </body>
+
 </html>
