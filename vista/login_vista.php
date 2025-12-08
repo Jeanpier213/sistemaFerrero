@@ -15,7 +15,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="index.php" method="post" class="formulario-metal">
+        <form action="menu.php" method="post" class="formulario-metal">
             
             <div class="grupo-input">
                 <label for="server">Servidor</label>
