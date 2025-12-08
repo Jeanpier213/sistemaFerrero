@@ -1,93 +1,158 @@
-<head>
-    <title>Ingreso de Productos</title>
-    <link rel="stylesheet" href="../style/ingreso_productos_estilos.css">
-    <script>
-            function editarProductoSeleccionado() {
-                var selects = document.getElementsByName("prods_id[]");
-                
-                if (selects.length > 0) {
-                    var idProducto = selects[0].value;
-                    
-                    if (idProducto) {
-                        window.location.href = '../Vista/productoVista.php?id=' + idProducto;
-                    } else {
-                        alert("Por favor, seleccione un producto válido primero.");
-                    }
-                }
-            }
-    </script>
-</head>
-<body>
-    <div class="main-container">
-        <div class="header-bar">
-            <h1>Ingreso de Productos</h1>
-            <form method="POST" style="display:inline;">
-                <button name="logout" class="btn-logout">Cerrar Sesión</button>
-            </form>
+<?php
+
+require_once __DIR__ . '/../Controlador/ingreso_productos_controlador.php';
+
+$control = new IngresoProductoControlador();
+
+$proveedores = $control->obtenerProveedores();
+$trabajadores = $control->obtenerTrabajadores();
+$listaProductos = $control->obtenerProductos();
+
+$columnasTabla = [
+    "Producto",
+    "Cantidad", 
+    "Precio Compra", 
+    "Acción"
+];
+
+$mensaje = "";
+$tipoMensaje = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guardar"])) {
+    try {
+        $prods_id = $_POST['prods_id'] ?? [];
+        $prods_cant = $_POST['prods_cant'] ?? [];
+        $prods_precio = $_POST['prods_precio'] ?? [];
+
+        $exito = $control->guardarIngreso(
+            $_POST['proveedor'], 
+            $_POST['trabajador'], 
+            $prods_id, 
+            $prods_cant, 
+            $prods_precio
+        );
+
+        if ($exito) {
+            header("Location: menu.php?page=inventario&msg=exito");
+            exit;
+        } else {
+            $mensaje = "Añada al menos un producto válido.";
+            $tipoMensaje = "error";
+        }
+    } catch (Exception $e) {
+        $mensaje = "Error: " . $e->getMessage();
+        $tipoMensaje = "error";
+    }
+}
+
+if (isset($_GET['msg']) && $_GET['msg'] == 'exito') {
+    $mensaje = "Ingreso registrado correctamente.";
+    $tipoMensaje = "exito";
+}
+?>
+
+<div class="main-container">
+    <div class="header-bar">
+        <h1>Ingreso de Productos</h1>
+    </div>
+
+    <?php if($mensaje): ?>
+        <div class="alert <?php echo $tipoMensaje; ?>"><?php echo $mensaje; ?></div>
+    <?php endif; ?>
+
+    <form method="POST" action="">
+        <div class="panel-datos">
+            <div class="campo">
+                <label>Proveedor:</label>
+                <select name="proveedor" required>
+                    <option value="">-- Seleccione --</option>
+                    <?php foreach($proveedores as $p): ?>
+                        <option value="<?php echo $p['idProveedor']; ?>"><?php echo $p['razonSocial']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="campo">
+                <label>Trabajador:</label>
+                <select name="trabajador" required>
+                    <option value="">-- Seleccione --</option>
+                    <?php foreach($trabajadores as $t): ?>
+                        <option value="<?php echo $t['idEmpleado']; ?>"><?php echo $t['nombre']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
 
-        <?php if($mensaje): ?>
-            <div class="alert <?php echo $tipoMensaje; ?>"><?php echo $mensaje; ?></div>
-        <?php endif; ?>
+        <table class="tabla-productos">
+            <thead>
+                <tr>
+                    <?php foreach($columnasTabla as $columna): ?>
+                        <th><?php echo $columna; ?></th>
+                    <?php endforeach; ?>
+                </tr>
+            </thead>
+            <tbody id="tabla-body">
+                <tr>
+                    <td>
+                        <select name="prods_id[]" required>
+                            <option value="">-- Producto --</option>
+                            <?php foreach($listaProductos as $prod): ?>
+                                <option value="<?php echo $prod['idProducto']; ?>">
+                                    <?php echo $prod['nombre']." (Ref: S/".$prod['precioReferencial'].")"; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                    <td><input type="number" name="prods_cant[]" value="1" min="1" required></td>
+                    <td><input type="number" name="prods_precio[]" step="0.01" required></td>
+                    <td><button type="button" class="btn-del" onclick="eliminarFila(this)">X</button></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <form method="POST" action="ingreso_productos_controlador.php">
-            <div class="panel-datos">
-                <div class="campo">
-                    <label>Proveedor:</label>
-                    <select name="proveedor" required>
-                        <?php foreach($proveedores as $p): ?>
-                            <option value="<?php echo $p['idProveedor']; ?>"><?php echo $p['razonSocial']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="campo">
-                    <label>Trabajador:</label>
-                    <select name="trabajador" required>
-                        <?php foreach($trabajadores as $t): ?>
-                            <option value="<?php echo $t['idEmpleado']; ?>"><?php echo $t['nombre']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
+        <div class="acciones">
+            <button type="button" class="btn-add" onclick="agregarFila()">
+                + Agregar Producto
+            </button>
+            
+            <button type="submit" name="guardar" class="btn-save">Registrar Ingreso</button>
+        </div>
+    </form>
+</div>
 
-            <table class="tabla-productos">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Compra</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-body">
-                    <tr>
-                        <td>
-                            <select name="prods_id[]" required>
-                                <?php foreach($listaProductos as $prod): ?>
-                                    <option value="<?php echo $prod['idProducto']; ?>">
-                                        <?php echo $prod['nombre']." (Ref: S/".$prod['precioReferencial'].")"; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <td><input type="number" name="prods_cant[]" value="1" min="1" required></td>
-                        <td><input type="number" name="prods_precio[]" step="0.01" required></td>
-                        <td><button type="button" class="btn-del" onclick="eliminarFila(this)">X</button></td>
-                    </tr>
-                </tbody>
-            </table>
+<link rel="stylesheet" href="../style/ingreso_productos_estilos.css">
 
-            <div class="acciones">
-                <button type="button" class="btn-add" onclick="editarProductoSeleccionado()" style="btn-add">
-                    Editar Productos
-                </button>
-                
-                <button type="submit" name="guardar" class="btn-save">Registrar Ingreso</button>
-            </div>
-        </form>
-    </div>
-</body>
+<script>
+    const opcionesProductos = `
+        <option value="">-- Producto --</option>
+        <?php foreach($listaProductos as $prod): ?>
+            <option value="<?php echo $prod['idProducto']; ?>">
+                <?php echo addslashes($prod['nombre']." (Ref: S/".$prod['precioReferencial'].")"); ?>
+            </option>
+        <?php endforeach; ?>
+    `;
 
-</html>
+    function agregarFila() {
+        var tbody = document.getElementById("tabla-body");
+        var fila = document.createElement("tr");
+        
+        fila.innerHTML = `
+            <td><select name="prods_id[]" required>${opcionesProductos}</select></td>
+            <td><input type="number" name="prods_cant[]" value="1" min="1" required></td>
+            <td><input type="number" name="prods_precio[]" step="0.01" required></td>
+            <td><button type="button" class="btn-del" onclick="eliminarFila(this)">X</button></td>
+        `;
+        
+        tbody.appendChild(fila);
+    }
 
-
+    function eliminarFila(btn) {
+        var fila = btn.parentNode.parentNode;
+        var tbody = document.getElementById("tabla-body");
+        
+        if (tbody.rows.length > 1) {
+            fila.parentNode.removeChild(fila);
+        } else {
+            alert("Debe mantener al menos un producto.");
+        }
+    }
+</script>
