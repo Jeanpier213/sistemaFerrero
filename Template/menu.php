@@ -47,7 +47,7 @@
 
                 // RUTA: Ingreso Productos
                 case 'inventario':
-                    $ruta = __DIR__ . "/../vista/ingresoProductoVista.php";
+                    $ruta = __DIR__ . "/../vista/ingreso_producto_vista.php";
                     if (file_exists($ruta)) include_once $ruta;
                     else echo "<div class='alert alert-danger'>No se encuentra: $ruta</div>";
                     break;
