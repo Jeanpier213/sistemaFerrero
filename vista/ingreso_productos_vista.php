@@ -1,6 +1,6 @@
 <head>
     <title>Ingreso de Productos</title>
-    <link rel="stylesheet" href="../Styles/ingreso_productos_estilos.css">
+    <link rel="stylesheet" href="../style/ingreso_productos_estilos.css">
     <script>
             function editarProductoSeleccionado() {
                 var selects = document.getElementsByName("prods_id[]");
@@ -87,4 +87,5 @@
         </form>
     </div>
 </body>
+
 </html>
