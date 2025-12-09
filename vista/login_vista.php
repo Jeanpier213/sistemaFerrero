@@ -34,7 +34,7 @@
         </form>
             <div class="cabecera-cobre">
                 <a href="../vista/usuarioVista.php" style="color: black; text-decoration: underline;">
-                    Regístrate
+                    No tienes cuenta? Registrarse aqui
             </a>
       </div>
     </div>
