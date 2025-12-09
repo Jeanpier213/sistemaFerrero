@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guardar"])) {
         );
 
         if ($exito) {
-            header("Location: ingreso_productos_vista.php?msg=exito");
+            header("Location: menu.php?page=inventario&msg=exito");
             exit;
         } else {
             $mensaje = "Añada al menos un producto válido.";
