@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_POST["cantidadTotal"], $_POST["fechaCaducidad"], $_POST["precioReferencial"],
         $_POST["precioVenta"], $_POST["umbralMinimo"], $_POST["idCategoria"], $_POST["idEstado"]
     )) {
-        // Redirigir de vuelta a la lista
+        // Redirigir de vuelta a la lista DENTRO del menú
         echo "<script>window.location.href = 'menu.php?page=productos&success=updated';</script>";
         exit;
     } else {
@@ -28,7 +28,7 @@ if (!$p) { echo "<div class='alert alert-danger'>Producto no encontrado.</div>";
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
         <h2 class="text-primary">Editar Producto</h2>
-        <a href="menu.php?page=productos" class="btn btn-secondary btn-sm">Volver</a>
+        
     </div>
 
     <div class="card shadow-sm">
