@@ -26,6 +26,7 @@
             <a class="nav-link" href="menu.php?page=inventario"><i class="bi-clipboard-plus"></i> Inventario</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
             <a class="nav-link" href="menu.php?page=clientes"><i class="bi bi-people"></i> Clientes</a>
+            <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=ventas"><i class="bi bi-cart"></i> Ventas</a>
             <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
@@ -62,6 +63,18 @@
                 // RUTA: CATEGORIAS
                 case 'categorias':
                     $ruta = __DIR__ . "/../vista/categoriaVista.php";
+                    if (file_exists($ruta)) include_once $ruta;
+                    break;
+                // CASO EMPLEADOS
+                case 'empleados':
+                    $ruta = __DIR__ . "/../vista/empleadoVista.php";
+                    if (file_exists($ruta)) include_once $ruta;
+                    else echo "<div class='alert alert-danger'>Falta crear vista/empleadoVista.php</div>";
+                    break;
+
+                // CASO EDITAR EMPLEADO
+                case 'editar_empleado':
+                    $ruta = __DIR__ . "/../vista/editarEmpleado.php";
                     if (file_exists($ruta)) include_once $ruta;
                     break;
 
