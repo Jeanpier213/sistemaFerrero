@@ -19,6 +19,7 @@
             <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
             <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
+            <a class="nav-link" href="menu.php?page=proveedor"><i class="bi bi-tags"></i> Proveedores</a>
             <hr>
             <p><b>Inventario</b></p>
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
@@ -47,10 +48,13 @@
             case 'editar_empleado':
                 include_once "../vista/editarEmpleado.php";
                 break;
+                  case 'proveedor':
+                include_once "../vista/proveedorVista.php";
+                break;
             case 'categorias':
                 include_once "../vista/categoriaVista.php";
                 break;
-                 case 'editar_categorias':
+            case 'editar_categorias':
                 include_once "../vista/categoria-editarVista.php";
                 break;
             case 'entrada':
