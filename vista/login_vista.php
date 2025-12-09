@@ -15,12 +15,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="login_controlador.php" method="post" class="formulario-metal">
-            
-            <div class="grupo-input">
-                <label for="server">Servidor</label>
-                <input type="text" id="server" name="txtServidor" placeholder="servidor" required>
-            </div>
+        <form action="../Controlador/login_controlador.php" method="post" class="formulario-metal">
 
             <div class="grupo-input">
                 <label for="user">Usuario</label>
@@ -32,24 +27,24 @@
                 <input type="password" id="pass" name="txtClave" placeholder="contraseña">
             </div>
 
-            <div class="grupo-input">
-                <label for="db">Base de Datos</label>
-                <input type="text" id="db" name="txtBD" placeholder="Base de Datos" required>
-            </div>
-
             <button name="conectar" type="submit" class="boton-cobre">
                 <span class="brillo"></span>
                 CONECTAR
             </button>
         </form>
+            <div class="cabecera-cobre">
+                <a href="../vista/usuarioVista.php" style="color: black; text-decoration: underline;">
+                    Regístrate
+            </a>
+      </div>
     </div>
-        <div class="text-center mt-3">
-    <a href="usuarioVista.php" style="color: black; text-decoration: underline;">
-        ¿No tienes cuenta? Regístrate aquí
-    </a>
+
 
 </body>
 
 </html>
+
+
+
 
 
