@@ -22,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     $idEstado = $_POST["idEstado"];
 
     if ($control->guardar($nombre, $descripcion, $idEstado)) {
-        header("Location: categoriaVista.php?success=1");
+  
+        echo "<script>window.location.href='menu.php?page=categorias&success=1';</script>"; exit;
         exit;
     }
 }
@@ -54,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 <div>
 
 
-<form action="categoriaVista.php" method="POST">
+<form action="menu.php?page=categorias" method="POST">
 
     <label>Nombre:</label>
     <input type="text" name="nombre" required><br><br>

@@ -15,14 +15,14 @@
         <hr>
         <nav class="nav flex-column mb-auto">
             <a class="nav-link" href="menu.php?page=inicio"><i class="bi bi-house-door"></i> Inicio</a>
+    
             <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
             <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
-            <a class="nav-link" href="menu.php?page=proveedores"><i class="bi bi-truck"></i> Proveedores</a>
             <hr>
             <p><b>Inventario</b></p>
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
-            <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-plus"></i> Salidas</a>
+             <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-plus"></i> Salidas</a>
             <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
     </div>
@@ -50,14 +50,11 @@
             case 'categorias':
                 include_once "../vista/categoriaVista.php";
                 break;
+                 case 'editar_categorias':
+                include_once "../vista/categoria-editarVista.php";
+                break;
             case 'entrada':
                 include_once "../vista/ingreso_productos_vista.php";
-                break;
-            case 'proveedores':
-                include_once "../vista/proveedorVista.php";
-                break;
-            case 'editar_proveedor':
-                include_once "../vista/editarProveedorVista.php";
                 break;
             case 'inicio':
             default:

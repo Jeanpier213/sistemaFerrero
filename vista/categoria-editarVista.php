@@ -12,7 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $idEstado = $_POST["idEstado"];
 
     if ($control->actualizar($id, $nombre, $descripcion, $idEstado)) {
-        header("Location: categoriaVista.php?success=edit");
+   
+        echo "<script>window.location.href='menu.php?page=categorias&success=1';</script>"; exit;
         exit;
     }
 }
@@ -23,7 +24,7 @@ $categoria = $control->editar($_GET["id"]);
 
 <h2>Editar Categoría</h2>
 
-<form action="categoria-editarVista.php" method="POST">
+<form action="menu.php?page=editar_categorias" method="POST">
 
     <input type="hidden" name="idCategoria" value="<?= $categoria['idCategoria'] ?>">
 
