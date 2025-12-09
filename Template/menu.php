@@ -39,6 +39,9 @@
             case 'salidas':
                 include_once "../vista/salidaInventarioVista.php";
                 break;
+                 case 'editar_salidas':
+                include_once "../vista/salidainventario-editarVista.php";
+                break;
             case 'editar_producto':
                 include_once "../vista/editarProductoVista.php";
                 break;

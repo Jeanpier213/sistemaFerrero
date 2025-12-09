@@ -20,6 +20,13 @@ class salidaControlador {
     public function registrarSalidaConDetalle($fecha, $idTrabajador, $motivo, $detallesArray) {
         return $this->modelo->registrarSalidaConDetalle($fecha, $idTrabajador, $motivo, $detallesArray);
     }
+ public function editar($idSalida, $motivo, $detallesArray) {
+        return $this->modelo->editarSalidaConDetalle($idSalida, $motivo, $detallesArray);
+    }
+
+    public function obtenerSalidaPorId($idSalida) {
+        return $this->modelo->obtenerSalidaConDetallePorId($idSalida);
+    }
 
     
     public function registrar() {
@@ -41,7 +48,7 @@ class salidaControlador {
         $this->modelo->registrarSalidaConDetalle($fecha, $idTrabajador, $motivo, $detallesFiltrados);
 
         // redireccionar
-        header("Location: ../Vista/salidaInventarioVista.php");
+        header("Location: ../Template/menu.php?page=salidas");
         exit();
     }
 }

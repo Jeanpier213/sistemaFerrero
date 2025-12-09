@@ -72,4 +72,64 @@ class Salida {
             throw $e; // quien llame lo manejará
         }
     }
+
+    public function editarSalidaConDetalle($idSalida, $motivo, $detallesArray) {
+    try {
+        $this->pdo->beginTransaction();
+
+        // 1) actualizar motivo
+        $stmt = $this->pdo->prepare("UPDATE salida SET motivo = ? WHERE idSalida = ?");
+        $stmt->execute([$motivo, $idSalida]);
+
+        // 2) obtener stock anterior del detalle para revertir
+        $sqlOld = $this->pdo->prepare("SELECT idProducto, cantidad FROM detalleSalida WHERE idSalida = ?");
+        $sqlOld->execute([$idSalida]);
+        $detallesPrevios = $sqlOld->fetchAll(PDO::FETCH_ASSOC);
+
+        // 3) devolver stock anterior (sumar)
+        $updateStock = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal + ? WHERE idProducto = ?");
+        foreach ($detallesPrevios as $dp) {
+            $updateStock->execute([$dp['cantidad'], $dp['idProducto']]);
+        }
+
+        // 4) eliminar detalle anterior
+        $stmtDel = $this->pdo->prepare("DELETE FROM detalleSalida WHERE idSalida = ?");
+        $stmtDel->execute([$idSalida]);
+
+        // 5) insertar nuevo detalle
+        $stmtDetalle = $this->pdo->prepare("INSERT INTO detalleSalida (idSalida, idProducto, cantidad) VALUES (?, ?, ?)");
+        $stmtStock = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal - ? WHERE idProducto = ?");
+
+        foreach ($detallesArray as $d) {
+            $stmtDetalle->execute([$idSalida, $d['idProducto'], $d['cantidad']]);
+            $stmtStock->execute([$d['cantidad'], $d['idProducto']]);
+        }
+
+        $this->pdo->commit();
+        return true;
+
+    } catch (Exception $e) {
+        $this->pdo->rollBack();
+        throw $e;
+    }
+}
+public function obtenerSalidaConDetallePorId($idSalida) {
+    $sql = $this->pdo->prepare("
+        SELECT 
+            s.idSalida,
+            s.fecha,
+            s.motivo,
+            s.idTrabajador,
+            ds.idDetalleSalida,
+            ds.idProducto,
+            ds.cantidad
+        FROM salida s
+        INNER JOIN detalleSalida ds ON ds.idSalida = s.idSalida
+        WHERE s.idSalida = ?
+        ORDER BY ds.idDetalleSalida ASC
+    ");
+    $sql->execute([$idSalida]);
+    return $sql->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }

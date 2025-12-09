@@ -35,7 +35,7 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
 
 <h2>Registrar Nueva Salida</h2>
 
-<form action="../Controlador/salidaControlador.php" method="POST">
+<form action="menu.php?page=salidas" method="POST">
 
     Fecha: <input type="date" name="fecha" required><br>
 
@@ -70,10 +70,10 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
         <?php for ($i = 0; $i < 10; $i++): ?>
             <tr>
                 <td>
-                    <select name="detalle[<?= $i ?>][idProducto]">
+                    <select name="detalle[<?= $i ?>][idProducto]" >
                         <option value="">Seleccione</option>
                         <?php foreach ($productos as $p): ?>
-                            <option value="<?= $p['idProducto'] ?>">
+                            <option value="<?= $p['idProducto'] ?>"  >
                                 <?= $p['nombre'] ?> (Stock: <?= $p['cantidadTotal'] ?>)
                             </option>
                         <?php endforeach; ?>
@@ -110,6 +110,7 @@ unset($columnasDetalle[0]); // elimina la segunda columna
         <?php foreach ($columnasDetalle as $col): ?>
             <th><?= $col ?></th>
         <?php endforeach; ?>
+          <th> Acciones</th>
     </tr>
 
    <?php for ($i = 0; $i < count($salidas); $i++): ?>
@@ -121,6 +122,8 @@ unset($columnasDetalle[0]); // elimina la segunda columna
         <td><?= $salidas[$i]['motivo'] ?></td>
     <td><?= $salidas[$i]['idProducto'] ?></td>
     <td><?= $salidas[$i]['cantidadSalida'] ?></td>
+    <td>
+        <a href="menu.php?page=editar_salidas&id=<?= $salidas[$i]['idSalida'] ?>">Editar</a>
 </tr>
 <?php endfor; ?>
 </table>
