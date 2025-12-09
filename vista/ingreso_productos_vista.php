@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../Controlador/ingreso_productos_controlador.php';
 
 $control = new IngresoProductoControlador();
@@ -8,12 +7,10 @@ $proveedores = $control->obtenerProveedores();
 $trabajadores = $control->obtenerTrabajadores();
 $listaProductos = $control->obtenerProductos();
 
-$columnasTabla = [
-    "Producto",
-    "Cantidad", 
-    "Precio Compra", 
-    "Acción"
-];
+$stmt = $control->listarIngresos(); 
+$columnCount = $stmt->columnCount(); 
+
+$columnasTablaForm = ["Producto", "Cantidad", "Precio Compra", "Acción"];
 
 $mensaje = "";
 $tipoMensaje = "";
@@ -33,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guardar"])) {
         );
 
         if ($exito) {
-            header("Location: menu.php?page=inventario&msg=exito");
+            header("Location: ingreso_productos_vista.php?msg=exito");
             exit;
         } else {
             $mensaje = "Añada al menos un producto válido.";
@@ -50,6 +47,8 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exito') {
     $tipoMensaje = "exito";
 }
 ?>
+
+<link rel="stylesheet" href="../style/ingreso_productos_estilos.css">
 
 <div class="main-container">
     <div class="header-bar">
@@ -85,7 +84,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exito') {
         <table class="tabla-productos">
             <thead>
                 <tr>
-                    <?php foreach($columnasTabla as $columna): ?>
+                    <?php foreach($columnasTablaForm as $columna): ?>
                         <th><?php echo $columna; ?></th>
                     <?php endforeach; ?>
                 </tr>
@@ -117,9 +116,39 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exito') {
             <button type="submit" name="guardar" class="btn-save">Registrar Ingreso</button>
         </div>
     </form>
-</div>
 
-<link rel="stylesheet" href="../style/ingreso_productos_estilos.css">
+    <div class="historial-container">
+        <h2>Historial de Ingresos</h2>
+        
+        <table class="tabla-historial">
+            <thead>
+                <tr>
+                    <?php
+                    for ($i = 0; $i < $columnCount; $i++) {
+                        $meta = $stmt->getColumnMeta($i);
+                        echo "<th>" . $meta['name'] . "</th>";
+                    }
+                    ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+                    echo "<tr>";
+                    for ($i = 0; $i < $columnCount; $i++) {
+                        if ($i == 0) {
+                            echo "<td><a href='ingresodetalle.php?id=" . $row[$i] . "'>" . $row[$i] . "</a></td>";
+                        } else {
+                            echo "<td>" . $row[$i] . "</td>";
+                        }
+                    }
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script>
     const opcionesProductos = `
