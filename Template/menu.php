@@ -16,6 +16,7 @@
         <nav class="nav flex-column mb-auto">
             <a class="nav-link" href="menu.php?page=inicio"><i class="bi bi-house-door"></i> Inicio</a>
             <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
+            <a class="nav-link" href="menu.php?page=inventario"><i class="bi-clipboard-plus"></i> Inventario</a>
             <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
@@ -30,6 +31,9 @@
         switch ($page) {
             case 'productos':
                 include_once "../vista/productoVista.php";
+                break;
+            case 'inventario':
+                include_once "/../vista/productoVista.php";
                 break;
             case 'editar_producto':
                 include_once "../vista/editarProductoVista.php";
