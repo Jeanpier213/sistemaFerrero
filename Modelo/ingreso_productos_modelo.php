@@ -53,5 +53,23 @@ class IngresoProducto {
             throw $e;
         }
     }
+
+    public function listarIngresos() {
+        $sql = "SELECT 
+                    i.idIngreso AS 'ID', 
+                    i.fecha AS 'Fecha Registro', 
+                    pr.razonSocial AS 'Proveedor', 
+                    CONCAT(p.nombres, ' ', p.apellidos) AS 'Trabajador',
+                    (SELECT IFNULL(SUM(MontoTotal), 0) FROM detalleingreso WHERE idIngreso = i.idIngreso) AS 'Total (S/)'
+                FROM ingreso i
+                INNER JOIN proveedor pr ON i.idProveedor = pr.idProveedor
+                INNER JOIN empleado e ON i.idTrabajador = e.idEmpleado
+                INNER JOIN persona p ON e.idPersona = p.idPersona
+                ORDER BY i.fecha DESC";
+        
+
+        return $this->pdo->query($sql);
+    }
 }
 ?>
+

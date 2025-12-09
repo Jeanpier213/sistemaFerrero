@@ -40,5 +40,10 @@ class IngresoProductoControlador {
 
         return $this->modelo->registrarIngreso($idProveedor, $idTrabajador, $detalles);
     }
+
+    public function listarIngresos() {
+        return $this->modelo->listarIngresos();
+    }
 }
 ?>
+
