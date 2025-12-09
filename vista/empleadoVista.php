@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Controlador/EmpleadoControlador.php';
+require_once __DIR__ . '/../Controlador/empleadoControlador.php';
 $control = new EmpleadoControlador();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
