@@ -103,7 +103,6 @@ button {
     padding: 5px 10px;
 }
 
-/* Alertas */
 .alert {
     padding: 10px;
     margin-bottom: 10px;
@@ -118,4 +117,44 @@ button {
 .error {
     background: #ffe2e2;
     color: #8a0000;
+}
+
+.historial-container {
+    margin-top: 30px;
+    border-top: 2px solid #8ea0b8;
+    padding-top: 20px;
+}
+
+.historial-container h2 {
+    color: #2d4c86;
+    margin-bottom: 15px;
+}
+
+.tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-historial th {
+    background: #6f8ec2;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.tabla-historial td {
+    padding: 8px;
+    border: 1px solid #8ea0b8;
+    background: #ffffff;
+}
+
+.tabla-historial a {
+    color: #3d5ea5;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.tabla-historial a:hover {
+    text-decoration: underline;
+    color: #1a1a1a;
 }
