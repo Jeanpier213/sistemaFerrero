@@ -83,7 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     <?php foreach ($categorias as $c): ?>
         <tr>
             <td>
-                <a href="categoria-editarVista.php?id=<?= $c['idCategoria'] ?>">
+                
+                <a href="menu.php?page=editar_categorias&id=<?= $c['idCategoria'] ?>">
                     <?= $c['idCategoria'] ?>
                 </a>
             </td>
