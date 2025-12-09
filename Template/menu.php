@@ -18,6 +18,7 @@
             <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
             <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
+            <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
             <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
     </div>
@@ -41,6 +42,9 @@
                 break;
             case 'categorias':
                 include_once "../vista/categoriaVista.php";
+                break;
+            case 'entrada':
+                include_once "../vista/ingreso_productos_vista.php";
                 break;
             case 'inicio':
             default:
