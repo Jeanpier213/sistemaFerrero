@@ -33,7 +33,7 @@
                 include_once "../vista/productoVista.php";
                 break;
             case 'inventario':
-                include_once "/../vista/productoVista.php";
+                include_once "../vista/ingresar_productos_vista.php";
                 break;
             case 'editar_producto':
                 include_once "../vista/editarProductoVista.php";
