@@ -22,8 +22,8 @@
             <a class="nav-link" href="menu.php?page=proveedor"><i class="bi bi-tags"></i> Proveedores</a>
             <hr>
             <p><b>Inventario</b></p>
-            <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
-             <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-plus"></i> Salidas</a>
+            <a class="nav-link" href="menu.php?page=entrada"><i class="bi-clipboard-plus"></i> Entradas</a>
+             <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-minus"></i> Salidas</a>
             <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
     </div>
