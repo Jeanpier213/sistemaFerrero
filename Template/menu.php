@@ -16,10 +16,12 @@
         <nav class="nav flex-column mb-auto">
             <a class="nav-link" href="menu.php?page=inicio"><i class="bi bi-house-door"></i> Inicio</a>
             <a class="nav-link" href="menu.php?page=productos"><i class="bi bi-box-seam"></i> Productos</a>
-            <a class="nav-link" href="menu.php?page=inventario"><i class="bi-clipboard-plus"></i> Inventario</a>
             <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
+            <hr>
+            <p><b>Inventario</b></p>
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
+             <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-plus"></i> Salidas</a>
             <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
     </div>
@@ -32,8 +34,8 @@
             case 'productos':
                 include_once "../vista/productoVista.php";
                 break;
-            case 'inventario':
-                include_once "../vista/ingresar_productos_vista.php";
+            case 'salidas':
+                include_once "../vista/salidaInventarioVista.php";
                 break;
             case 'editar_producto':
                 include_once "../vista/editarProductoVista.php";
