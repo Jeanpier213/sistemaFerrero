@@ -21,13 +21,8 @@
             <a class="nav-link" href="menu.php?page=proveedores"><i class="bi bi-truck"></i> Proveedores</a>
             <hr>
             <p><b>Inventario</b></p>
-<<<<<<< HEAD
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi bi-tags"></i> Entradas</a>
             <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-plus"></i> Salidas</a>
-=======
-            <a class="nav-link" href="menu.php?page=entrada"><i class="bi-clipboard-plus"></i> Entradas</a>
-             <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-minus"></i> Salidas</a>
->>>>>>> 9ce1e7ba2e0c24350ee72215f3ad73a2ea60d0d1
             <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
     </div>
