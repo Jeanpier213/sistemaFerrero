@@ -6,10 +6,10 @@ $mensajeError = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["conectar"])) {
     
-    $servidor = $_POST["txtServidor"];
+    $servidor = $_POST["localhost"];
     $usuario = $_POST["txtUsuario"];
     $clave = $_POST["txtClave"];
-    $bd = $_POST["txtBD"];
+    $bd = $_POST["ferreteriasantos_db"];
 
     $loginModelo = new LoginModelo();
 
@@ -32,3 +32,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["conectar"])) {
 require_once __DIR__ . '/../Vista/login_vista.php';
 
 ?>
+
+
