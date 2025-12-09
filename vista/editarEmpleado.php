@@ -4,7 +4,7 @@ $control = new EmpleadoControlador();
 
 $id = $_GET["id"] ?? $_POST["idEmpleado"] ?? null;
 
-// GUARDAR CAMBIOS
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($control->actualizar(
         $_POST["idEmpleado"], $_POST["idPersona"], $_POST["nombres"], $_POST["apellidos"],
@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// CARGAR DATOS
+
 $e = ($id) ? $control->editar($id) : null;
 if (!$e) { echo "<div class='alert alert-danger'>Empleado no encontrado.</div>"; return; }
 ?>
