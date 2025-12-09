@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <?php
+=======
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <?php
+>>>>>>> Stashed changes
 require_once("../Controlador/salidaControlador.php");
 require_once("../Controlador/productoControlador.php");
 require_once("../Controlador/empleadoControlador.php");
@@ -126,4 +130,8 @@ unset($columnasDetalle[0]); // elimina la segunda columna
 </table>
 
 </body>
+<<<<<<< Updated upstream
 </html>
+=======
+</html>
+>>>>>>> Stashed changes
