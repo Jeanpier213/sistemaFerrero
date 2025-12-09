@@ -78,7 +78,7 @@
                             <h1>Bienvenido al Panel</h1>
                             <p>Selecciona una opción del menú.</p>
                             <hr>
-                            <p><b>© Ferereria 2025</b></p>
+                            <p><b>© Ferereria 2025 </b></p>
                         </div>";
                     break;
             }
