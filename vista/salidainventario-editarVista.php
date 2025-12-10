@@ -25,7 +25,10 @@ $productos = $productoCtrl->listar();
 $motivoActual = $salida[0]["motivo"];
 $fecha = $salida[0]["fecha"];
 $idTrabajador = $salida[0]["idTrabajador"];
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -33,12 +36,6 @@ $idTrabajador = $salida[0]["idTrabajador"];
 <meta charset="UTF-8">
 <title>Editar Salida</title>
 
-<style>
-    body { font-family: Arial; max-width: 900px; margin: auto; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th, td { border: 1px solid #333; padding: 6px; text-align: center; }
-    .btn { padding: 8px 14px; background: blue; color: white; border: none; cursor: pointer; }
-</style>
 </head>
 
 <body>
@@ -51,10 +48,10 @@ $idTrabajador = $salida[0]["idTrabajador"];
     <input type="hidden" name="idSalida" value="<?= $idSalida ?>">
 
     Fecha:  
-    <input type="date" value="<?= $fecha ?>" disabled><br><br>
+    <input type="date"  name="fecha" value="<?= $fecha ?>" disabled><br><br>
 
     Trabajador:  
-    <input type="text" value="<?= $idTrabajador ?>" disabled><br><br>
+    <input type="text"  name="idTrabajador" value="<?= $idTrabajador ?>" disabled><br><br>
 
     Motivo:
     <select name="motivo" required>

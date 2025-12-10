@@ -1,50 +1,36 @@
+<!DOCTYPE html>
+<html>
 <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="../style/login_estilos.css">
+    <title>Login - Ferretería</title>
+    <link rel="stylesheet" href="../style/login.css">
 </head>
 <body>
 
-    <div class="contenedor-metalico">
-        <div class="cabecera-cobre">
-            <h2>Acceso al sistema de Ferreteria Santos</h2>
+<div class="login-box">
+
+    <h2>Iniciar Sesión</h2>
+
+    <?php if (isset($_GET["error"])): ?>
+        <div class="error"><?= htmlspecialchars($_GET["error"]) ?></div>
+    <?php endif; ?>
+
+    <form action="../Controlador/login_controlador.php" method="POST">
+
+        <div class="form-group">
+            <label>Usuario:</label>
+            <input class="form-control" type="text" name="username" autocomplete="off" required>
         </div>
 
-        <?php if (!empty($mensajeError)): ?>
-            <div class="alerta-error">
-                <?php echo $mensajeError; ?>
-            </div>
-        <?php endif; ?>
+        <div class="form-group">
+            <label>Contraseña:</label>
+            <input class="form-control" type="password" name="password" required>
+        </div>
 
-        <form action="../Controlador/login_controlador.php" method="post" class="formulario-metal">
+        <button type="submit">Ingresar</button>
 
-            <div class="grupo-input">
-                <label for="user">Usuario</label>
-                <input type="text" id="user" name="txtUsuario" placeholder="usuario" required>
-            </div>
+    </form>
 
-            <div class="grupo-input">
-                <label for="pass">Clave</label>
-                <input type="password" id="pass" name="txtClave" placeholder="contraseña">
-            </div>
-
-            <button name="conectar" type="submit" class="boton-cobre">
-                <span class="brillo"></span>
-                CONECTAR
-            </button>
-        </form>
-            <div class="cabecera-cobre">
-                <a href="../vista/usuarioVista.php" style="color: black; text-decoration: underline;">
-                    No tienes cuenta? Registrarse aqui
-            </a>
-      </div>
-    </div>
-
+</div>
 
 </body>
-
 </html>
-
-
-
-
-

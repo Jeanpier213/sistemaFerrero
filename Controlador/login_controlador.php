@@ -1,36 +1,52 @@
 <?php
 session_start();
-require_once __DIR__ . '/../Modelo/login_modelo.php';
+require_once("../Modelo/login.php");
 
-$mensajeError = '';
+class loginControlador
+{
+    private $modelo;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["conectar"])) {
-    
-    $servidor = $_POST["localhost"];
-    $usuario = $_POST["txtUsuario"];
-    $clave = $_POST["txtClave"];
-    $bd = $_POST["ferreteriasantos_db"];
+    public function __construct()
+    {
+        $this->modelo = new Usuario();
+    }
 
-    $loginModelo = new LoginModelo();
-
-    try {
-        if ($loginModelo->intentarConexion($servidor, $usuario, $clave, $bd)) {
-            
-            $_SESSION["servidor"] = $servidor;
-            $_SESSION["usuario"] = $usuario;
-            $_SESSION["clave"] = $clave;
-            $_SESSION["BD"] = $bd;
-
-            header('Location: ../Template/Menu.php');
+    public function iniciarSesion()
+    {
+        if (!isset($_POST["username"]) || !isset($_POST["password"])) {
+            header("Location: ../Vistas/login.php?error=Completa los campos");
             exit();
         }
-    } catch (Exception $e) {
-        $mensajeError = $e->getMessage();
+
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+
+        $usuario = $this->modelo->buscarPorUsername($username);
+
+        if (!$usuario) {
+            header("Location: ../Vistas/login.php?error=Usuario no encontrado");
+            exit();
+        }
+
+        if ($usuario["idEstado"] == 0) {
+            header("Location: ../Vistas/login.php?error=Usuario desactivado");
+            exit();
+        }
+
+        if (!password_verify($password, $usuario["passwordHash"])) {
+            header("Location: ../Vistas/login.php?error=Contraseña incorrecta");
+            exit();
+        }
+
+        // Guardar sesión
+        $_SESSION["usuario"] = $usuario["trabajadorNombre"];
+        $_SESSION["idUsuario"] = $usuario["idUsuario"];
+
+        header("Location: ../Template/menu.php");
+        exit();
     }
 }
 
-require_once __DIR__ . '/../Vista/login_vista.php';
-
+$ctrl = new loginControlador();
+$ctrl->iniciarSesion();
 ?>
-
-

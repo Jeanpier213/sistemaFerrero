@@ -110,7 +110,7 @@ input.onkeyup = function() {
         let filaTexto = filas[i].innerText.toLowerCase();
         
         if (filaTexto.indexOf(texto) > -1) {
-            filas[i].style.display = "";
+            filas[i].display = "";
         } else {
             filas[i].style.display = "none";
         }

@@ -48,7 +48,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exito') {
 }
 ?>
 
-<link rel="stylesheet" href="../style/ingreso_productos_estilos.css">
+<link rel="stylesheet" href="">
 
 <div class="main-container">
     <div class="header-bar">

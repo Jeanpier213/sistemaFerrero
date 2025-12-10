@@ -21,14 +21,7 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
 <head>
 <meta charset="UTF-8">
 <title>Registro de Salidas</title>
-<style>
-    body { font-family: Arial; max-width: 1200px; margin: auto; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
-    th, td { border: 1px solid #333; padding: 6px; text-align: center; }
-    h2 { background: #222; color: #fff; padding: 6px; }
-    input, select { padding: 6px; margin: 4px; }
-    .btn { padding: 8px 14px; background: green; color: #fff; border: none; cursor: pointer; }
-</style>
+
 </head>
 
 <body>
