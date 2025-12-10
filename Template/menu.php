@@ -51,8 +51,11 @@
             case 'editar_empleado':
                 include_once "../vista/editarEmpleado.php";
                 break;
-                  case 'proveedor':
+            case 'proveedor':
                 include_once "../vista/proveedorVista.php";
+                break;
+            case 'editar_proveedor':
+                include_once "../vista/editarProveedorVista.php";
                 break;
             case 'categorias':
                 include_once "../vista/categoriaVista.php";

@@ -1,68 +1,138 @@
 <?php
-require_once __DIR__ . '/../Controlador/empleadoControlador.php';
+require_once("../Controlador/empleadoControlador.php");
+
 $control = new EmpleadoControlador();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["accion"]) && $_POST["accion"] === 'guardar') {
-        $control->guardar($_POST['nombres'], $_POST['apellidos'], $_POST['dni'], $_POST['telefono'], $_POST['email'], $_POST['tipo']);
-        echo "<script>window.location.href='menu.php?page=empleados&success=1';</script>"; exit;
-    }
-    if (isset($_POST["accion"]) && $_POST["accion"] === 'estado') {
-        $control->cambiarEstado($_POST['idEmpleado'], $_POST['nuevo_estado']);
-        echo "<script>window.location.href='menu.php?page=empleados';</script>"; exit;
+// BUSCAR
+$texto = $_POST["buscar"] ?? "";
+if (isset($_POST["buscar"])) {
+    $lista = $control->buscar($_POST["buscar"]);
+} else {
+    $lista = $control->listar();
+}
+
+// GUARDAR
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
+    
+    $nombres = $_POST["nombres"];
+    $apellidos = $_POST["apellidos"];
+    $dni = $_POST["dni"];
+    $telefono = $_POST["telefono"];
+    $email = $_POST["email"];
+    $tipo = $_POST["tipo"];
+
+    if ($control->guardar($nombres, $apellidos, $dni, $telefono, $email, $tipo)) {
+        echo "<script>window.location.href='menu.php?page=empleados&success=1';</script>"; 
+        exit;
     }
 }
-$texto = $_POST["buscar"] ?? "";
-$lista = isset($_POST["buscar"]) ? $control->buscar($texto) : $control->listar();
 ?>
 
-<h2>Gestión de Empleados</h2>
-<?php if (isset($_GET['success'])): ?><p style="color: green;">Empleado guardado</p><?php endif; ?>
+<h1><b>Empleados</b></h1>
 
-<div class="form-container">
-    <form method="POST" action="menu.php?page=empleados" class="form-inline">
-        <input type="hidden" name="accion" value="guardar">
-        <div class="form-group"><label>Nombres</label><input name="nombres" class="form-control" required></div>
-        <div class="form-group"><label>Apellidos</label><input name="apellidos" class="form-control" required></div>
-        <div class="form-group"><label>DNI</label><input name="dni" class="form-control" maxlength="8" required></div>
-        <div class="form-group"><label>Teléfono</label><input name="telefono" class="form-control"></div>
-        <div class="form-group"><label>Cargo</label><input name="tipo" class="form-control" required></div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+<input type="text" id="buscar" placeholder="Buscar empleado..." autocomplete="off">
+<br><br>
+
+<?php if (isset($_GET['success'])): ?>
+    <p style="color: green;">Empleado guardado correctamente</p>
+<?php endif; ?>
+
+<div>
+    <form action="menu.php?page=empleados" method="POST">
+        
+        <label>Nombres:</label>
+        <input type="text" name="nombres" required><br><br>
+
+        <label>Apellidos:</label>
+        <input type="text" name="apellidos" required><br><br>
+
+        <label>DNI:</label>
+        <input type="text" name="dni" required><br><br>
+
+        <label>Teléfono:</label>
+        <input type="text" name="telefono"><br><br>
+
+        <label>Email:</label>
+        <input type="email" name="email"><br><br>
+
+        <label>Cargo:</label>
+        <input type="text" name="tipo" required><br><br>
+
+        <button type="submit">Agregar</button>
     </form>
 </div>
 
-<input type="text" id="buscar" placeholder="🔍 Buscar empleado..." class="form-control mb-3" style="width: 300px;">
+<br>
 
-<table id="tablaEmpleados">
-    <thead><tr><th>ID</th><th>Nombre</th><th>DNI</th><th>Cargo</th><th>Estado</th><th>Acciones</th></tr></thead>
-    <tbody>
-    <?php foreach ($lista as $e): $activo = $e['idEstado'] == 1; ?>
-        <tr>
-            <td><?= $e['idEmpleado'] ?></td>
-            <td><?= $e['nombres'] . " " . $e['apellidos'] ?></td>
-            <td><?= $e['dni'] ?></td>
-            <td><?= $e['tipo'] ?></td>
-            <td><?= $activo ? 'Activo' : 'Inactivo' ?></td>
-            <td>
-                <a href="menu.php?page=editar_empleado&id=<?= $e['idEmpleado'] ?>" class="btn btn-warning btn-sm">Editar</a>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="accion" value="estado">
-                    <input type="hidden" name="idEmpleado" value="<?= $e['idEmpleado'] ?>">
-                    <input type="hidden" name="nuevo_estado" value="<?= $activo ? 0 : 1 ?>">
-                    <button class="btn btn-<?= $activo?'danger':'success' ?> btn-sm"><?= $activo?'Desactivar':'Activar' ?></button>
-                </form>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<div>
+    <table id="tablaEmpleados" border="1">
+        <?php if (!empty($lista)): ?>
+            
+            <tr>
+                <?php 
+                $columnas = array_keys($lista[0]); 
+                foreach ($columnas as $col): 
+                    
+                    if ($col != 'idEstado') { 
+                ?>
+                    <th><?= $col ?></th>
+                <?php 
+                    } 
+                endforeach; 
+                ?>
+                
+                <th>Estado</th>
+            </tr>
+
+            <?php foreach ($lista as $fila): ?>
+                <tr>
+                    
+                    <td>
+                        <a href="menu.php?page=editar_empleado&id=<?= $fila['idEmpleado'] ?>">
+                            <?= $fila['idEmpleado'] ?>
+                        </a>
+                    </td>
+
+                    <?php 
+                        
+                        foreach (array_slice($fila, 1, null, true) as $key => $valor): 
+                            if ($key != 'idEstado'):
+                    ?>
+                        <td><?= $valor ?></td>
+                    <?php 
+                            endif;
+                        endforeach; 
+                    ?>
+
+                    <td>
+                        <?= ($fila['idEstado'] == 1) ? 'Activo' : 'Inactivo' ?>
+                    </td>
+
+                </tr>
+            <?php endforeach; ?>
+            
+        <?php else: ?>
+            <p>No hay empleados registrados.</p>
+        <?php endif; ?>
+    </table>
+</div>
 
 <script>
-document.getElementById("buscar").onkeyup = function() {
-    let val = this.value.toLowerCase();
-    let rows = document.getElementById("tablaEmpleados").getElementsByTagName("tr");
-    for(let i=1; i<rows.length; i++) {
-        if(rows[i].cells.length > 1) rows[i].style.display = rows[i].innerText.toLowerCase().includes(val) ? "" : "none";
+let input = document.getElementById("buscar");
+let tabla = document.getElementById("tablaEmpleados");
+
+input.onkeyup = function() {
+    let texto = input.value.toLowerCase();
+    let filas = tabla.getElementsByTagName("tr");
+
+    for (let i = 1; i < filas.length; i++) { 
+        let filaTexto = filas[i].innerText.toLowerCase();
+        
+        if (filaTexto.indexOf(texto) > -1) {
+            filas[i].style.display = "";
+        } else {
+            filas[i].style.display = "none";
+        }
     }
-}
+};
 </script>

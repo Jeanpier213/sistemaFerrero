@@ -1,84 +1,138 @@
 <?php
-require_once __DIR__ . '/../Controlador/ProveedorControlador.php';
+require_once("../Controlador/ProveedorControlador.php");
+
 $control = new ProveedorControlador();
 
-if (isset($_POST['accion'])) {
-    if ($_POST['accion'] === 'guardar') {
-        $control->guardar($_POST['nombres'], $_POST['apellidos'], $_POST['dni'], $_POST['telefono'], $_POST['email'], $_POST['razonSocial'], $_POST['ruc'], $_POST['direccion'], $_POST['tipoProductos']);
-        echo "<script>window.location.href='menu.php?page=proveedores&success=1';</script>"; exit;
-    }
-    if ($_POST['accion'] === 'estado') {
-        $control->cambiarEstado($_POST['idProveedor'], $_POST['nuevo_estado']);
-        echo "<script>window.location.href='menu.php?page=proveedores';</script>"; exit;
+// BUSCAR
+$texto = $_POST["buscar"] ?? "";
+if (isset($_POST["buscar"])) {
+    $lista = $control->buscar($_POST["buscar"]);
+} else {
+    $lista = $control->listar();
+}
+
+// GUARDAR
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["razonSocial"])) {
+
+    $nombres = $_POST["nombres"];
+    $apellidos = $_POST["apellidos"];
+    $dni = $_POST["dni"]; 
+    $telefono = $_POST["telefono"];
+    $email = $_POST["email"]; 
+    
+    $razonSocial = $_POST["razonSocial"];
+    $ruc = $_POST["ruc"];
+    $direccion = $_POST["direccion"];
+    $tipoProductos = $_POST["tipoProductos"];
+
+    if ($control->guardar($nombres, $apellidos, $dni, $telefono, $email, $razonSocial, $ruc, $direccion, $tipoProductos)) {
+        echo "<script>window.location.href='menu.php?page=proveedor&success=1';</script>"; 
+        exit;
+    } else {
+        
+        echo "<script>alert('Error al guardar. Verifica que el DNI o RUC no estén repetidos.');</script>";
     }
 }
-$texto = $_POST["buscar"] ?? "";
-$lista = isset($_POST["buscar"]) ? $control->buscar($texto) : $control->listar();
 ?>
 
-<h2 class="titulo-vista"><i class="bi bi-truck"></i> Gestión de Proveedores</h2>
+<h1><b>Proveedores</b></h1>
 
-<?php if (isset($_GET['success'])): ?><div class="alert alert-success p-2">Proveedor registrado.</div><?php endif; ?>
+<input type="text" id="buscar" placeholder="Buscar proveedor..." autocomplete="off">
+<br><br>
 
-<div class="form-container">
-    <h5 class="text-primary mb-3">Nuevo Proveedor</h5>
-    <form method="POST" action="menu.php?page=proveedores">
-        <input type="hidden" name="accion" value="guardar">
+<?php if (isset($_GET['success'])): ?>
+    <p style="color: green;">Proveedor guardado correctamente</p>
+<?php endif; ?>
+
+<div>
+    <form action="menu.php?page=proveedor" method="POST">
         
-        <div class="form-inline mb-3">
-            <div class="form-group"><label>Razón Social</label><input name="razonSocial" class="form-control" required></div>
-            <div class="form-group"><label>RUC</label><input name="ruc" class="form-control" maxlength="11" required></div>
-            <div class="form-group"><label>Dirección</label><input name="direccion" class="form-control"></div>
-            <div class="form-group"><label>Tipo Producto</label><input name="tipoProductos" class="form-control"></div>
-        </div>
+        <h3>Datos Empresa</h3>
+        <label>Razón Social:</label>
+        <input type="text" name="razonSocial" required><br><br>
 
-        <div class="form-inline">
-            <div class="form-group"><label>Nom. Contacto</label><input name="nombres" class="form-control" required></div>
-            <div class="form-group"><label>Ape. Contacto</label><input name="apellidos" class="form-control" required></div>
-            <div class="form-group"><label>Teléfono</label><input name="telefono" class="form-control"></div>
-            <input type="hidden" name="email" value="">
-            <input type="hidden" name="dni" value="">
-            
-            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Guardar</button>
-        </div>
+        <label>RUC:</label>
+        <input type="text" name="ruc" required><br><br>
+
+        <label>Dirección:</label>
+        <input type="text" name="direccion"><br><br>
+
+        <label>Rubro:</label>
+        <input type="text" name="tipoProductos"><br><br>
+
+        <h3>Datos Contacto</h3>
+        <label>Nombres:</label>
+        <input type="text" name="nombres" required><br><br>
+
+        <label>Apellidos:</label>
+        <input type="text" name="apellidos" required><br><br>
+
+        <label>DNI:</label>
+        <input type="text" name="dni" required><br><br>
+
+        <label>Teléfono:</label>
+        <input type="text" name="telefono"><br><br>
+        
+        <label>Email:</label>
+        <input type="email" name="email"><br><br>
+
+        <button type="submit">Agregar</button>
     </form>
 </div>
 
-<input type="text" id="buscar" placeholder="🔍 Buscar por Empresa o RUC..." class="form-control mb-3" style="width: 350px;">
+<br>
 
-<table id="tablaProv">
-    <thead>
-        <tr><th>RUC</th><th>Empresa</th><th>Rubro</th><th>Contacto</th><th>Dirección</th><th>Estado</th><th>Acciones</th></tr>
-    </thead>
-    <tbody>
-    <?php foreach ($lista as $p): $activo = ($p['idEstado'] == 1); ?>
-        <tr>
-            <td><?= $p['ruc'] ?></td>
-            <td style="font-weight: bold;"><?= $p['razonSocial'] ?></td>
-            <td><?= $p['tipoProductos'] ?></td>
-            <td><?= $p['nombres'] ?> (<?= $p['telefono'] ?>)</td>
-            <td><?= $p['direccion'] ?></td>
-            <td><?= $activo ? 'Activo' : 'Inactivo' ?></td>
-            <td>
-                <a href="menu.php?page=editar_proveedor&id=<?= $p['idProveedor'] ?>" class="btn btn-warning btn-sm">Editar</a>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="accion" value="estado">
-                    <input type="hidden" name="idProveedor" value="<?= $p['idProveedor'] ?>">
-                    <input type="hidden" name="nuevo_estado" value="<?= $activo ? 0 : 1 ?>">
-                    <button class="btn btn-<?= $activo?'danger':'success' ?> btn-sm"><?= $activo?'Desactivar':'Activar' ?></button>
-                </form>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<div>
+    <table id="tablaProv" border="1">
+        <?php if (!empty($lista)): ?>
+            <tr>
+                <?php 
+                $columnas = array_keys($lista[0]); 
+                foreach ($columnas as $col): 
+                    if ($col != 'idEstado') { 
+                ?>
+                    <th><?= $col ?></th>
+                <?php 
+                    } 
+                endforeach; 
+                ?>
+                <th>Estado</th>
+            </tr>
+
+            <?php foreach ($lista as $fila): ?>
+                <tr>
+                    <td>
+                        <a href="menu.php?page=editar_proveedor&id=<?= $fila['idProveedor'] ?>">
+                            <?= $fila['idProveedor'] ?>
+                        </a>
+                    </td>
+
+                    <?php 
+                        foreach (array_slice($fila, 1, null, true) as $key => $valor): 
+                            if ($key != 'idEstado'):
+                    ?>
+                        <td><?= $valor ?></td>
+                    <?php 
+                            endif;
+                        endforeach; 
+                    ?>
+
+                    <td><?= ($fila['idEstado'] == 1) ? 'Activo' : 'Inactivo' ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </table>
+</div>
 
 <script>
-document.getElementById("buscar").onkeyup = function() {
-    let val = this.value.toLowerCase();
-    let rows = document.getElementById("tablaProv").getElementsByTagName("tr");
-    for(let i=1; i<rows.length; i++) {
-        if(rows[i].cells.length > 1) rows[i].style.display = rows[i].innerText.toLowerCase().includes(val) ? "" : "none";
+let input = document.getElementById("buscar");
+let tabla = document.getElementById("tablaProv");
+input.onkeyup = function() {
+    let texto = input.value.toLowerCase();
+    let filas = tabla.getElementsByTagName("tr");
+    for (let i = 1; i < filas.length; i++) { 
+        let filaTexto = filas[i].innerText.toLowerCase();
+        if (filaTexto.indexOf(texto) > -1) filas[i].style.display = ""; else filas[i].style.display = "none";
     }
-}
+};
 </script>

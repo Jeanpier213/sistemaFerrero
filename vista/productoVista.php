@@ -1,82 +1,131 @@
 <?php
-require_once __DIR__ . '/../Controlador/ProductoControlador.php';
+require_once("../Controlador/productoControlador.php");
+
 $control = new ProductoControlador();
 
-// ACCIONES (Guardar, Estado)
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["accion"]) && $_POST["accion"] === 'guardar') {
-        $control->guardar($_POST["nombre"], $_POST["unidadMedida"], $_POST["tipo"], $_POST["cantidadTotal"], $_POST["fechaCaducidad"], $_POST["precioReferencial"], $_POST["precioVenta"], $_POST["umbralMinimo"], $_POST["idCategoria"], 1);
-        echo "<script>window.location.href='menu.php?page=productos&success=1';</script>"; exit;
-    }
-    if (isset($_POST["accion"]) && $_POST["accion"] === 'estado') {
-        $control->cambiarEstado($_POST['idProducto'], $_POST['nuevo_estado']);
-        echo "<script>window.location.href='menu.php?page=productos';</script>"; exit;
-    }
+// BUSCAR
+$texto = $_POST["buscar"] ?? "";
+if (isset($_POST["buscar"])) {
+    $lista = $control->buscar($_POST["buscar"]);
+} else {
+    $lista = $control->listar();
 }
 
-// BUSCAR / LISTAR
-$texto = $_POST["buscar"] ?? "";
-$productos = isset($_POST["buscar"]) ? $control->buscar($texto) : $control->listar();
+// GUARDAR (Estructura idéntica a tu ejemplo)
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
+
+    $nombre = $_POST["nombre"];
+    $unidadMedida = $_POST["unidadMedida"];
+    $tipo = $_POST["tipo"];
+    $cantidadTotal = $_POST["cantidadTotal"];
+    $fechaCaducidad = $_POST["fechaCaducidad"];
+    $precioReferencial = $_POST["precioReferencial"];
+    $precioVenta = $_POST["precioVenta"];
+    $umbralMinimo = $_POST["umbralMinimo"];
+    $idCategoria = $_POST["idCategoria"];
+    
+    // Por defecto al crear es 1 (Activo), o si lo mandas en hidden
+    $idEstado = 1; 
+
+    if ($control->guardar($nombre, $unidadMedida, $tipo, $cantidadTotal, $fechaCaducidad, $precioReferencial, $precioVenta, $umbralMinimo, $idCategoria, $idEstado)) {
+        
+        echo "<script>window.location.href='menu.php?page=productos&success=1';</script>"; 
+        exit;
+    }
+}
 ?>
 
-<h2>Gestión de Productos</h2>
+<h1><b>Productos</b></h1>
+
+<input type="text" id="buscar" placeholder="Buscar producto..." autocomplete="off">
+<br><br>
 
 <?php if (isset($_GET['success'])): ?>
-    <div class="alert alert-success p-2">Producto guardado correctamente</div>
+    <p style="color: green;">Producto guardado correctamente</p>
 <?php endif; ?>
 
-<div class="form-container">
-    <form method="POST" action="menu.php?page=productos" class="form-inline">
-        <input type="hidden" name="accion" value="guardar">
+<div>
+    <form action="menu.php?page=productos" method="POST">
         
-        <div class="form-group"><label>Nombre</label><input name="nombre" class="form-control" required></div>
-        <div class="form-group"><label>Unidad</label><input name="unidadMedida" class="form-control" size="5"></div>
-        <div class="form-group"><label>Tipo</label><input name="tipo" class="form-control" size="10"></div>
-        <div class="form-group"><label>Stock</label><input type="number" name="cantidadTotal" class="form-control" style="width: 80px;"></div>
-        <div class="form-group"><label>Precio</label><input type="number" step="0.01" name="precioVenta" class="form-control" style="width: 100px;" required></div>
-        <div class="form-group"><label>ID Cat</label><input type="number" name="idCategoria" class="form-control" style="width: 60px;" required></div>
-        <div class="form-group"><label>Fecha</label><input type="date" name="fechaCaducidad" class="form-control"></div>
-        
-        <button type="submit" class="btn btn-primary">Agregar</button>
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required><br><br>
+
+        <label>Unidad:</label>
+        <input type="text" name="unidadMedida"><br><br>
+
+        <label>Tipo:</label>
+        <input type="text" name="tipo"><br><br>
+
+        <label>Stock:</label>
+        <input type="number" name="cantidadTotal"><br><br>
+
+        <label>Precio Venta:</label>
+        <input type="number" step="0.01" name="precioVenta" required><br><br>
+
+        <label>ID Categoría:</label>
+        <input type="number" name="idCategoria" required><br><br>
+
+        <input type="hidden" name="fechaCaducidad">
+        <input type="hidden" name="precioReferencial">
+        <input type="hidden" name="umbralMinimo">
+
+        <button type="submit">Agregar</button>
     </form>
 </div>
 
-<input type="text" id="buscar" placeholder="🔍 Buscar producto..." class="form-control mb-3" style="width: 300px;">
+<br>
 
-<table id="tablaProductos">
-    <thead>
-        <tr><th>ID</th><th>Producto</th><th>Tipo</th><th>Stock</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr>
-    </thead>
-    <tbody>
-    <?php foreach ($productos as $p): $activo = $p['idEstado'] == 1; ?>
-        <tr>
-            <td><?= $p['idProducto'] ?></td>
-            <td><?= $p['nombre'] ?></td>
-            <td><?= $p['tipo'] ?></td>
-            <td><?= $p['cantidadTotal'] ?></td>
-            <td>S/ <?= $p['precioVenta'] ?></td>
-            <td><?= $activo ? 'Activo' : 'Inactivo' ?></td>
-            <td>
-                <a href="menu.php?page=editar_producto&id=<?= $p['idProducto'] ?>" class="btn btn-warning btn-sm">Editar</a>
-                
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="accion" value="estado">
-                    <input type="hidden" name="idProducto" value="<?= $p['idProducto'] ?>">
-                    <input type="hidden" name="nuevo_estado" value="<?= $activo ? 0 : 1 ?>">
-                    <button class="btn btn-<?= $activo?'danger':'success' ?> btn-sm"><?= $activo?'Desactivar':'Activar' ?></button>
-                </form>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<div>
+    <table id="tablaProductos" border="1">
+        <?php if (!empty($lista)): ?>
+            <tr>
+                <?php 
+                $columnas = array_keys($lista[0]); 
+                foreach ($columnas as $col): 
+                    if ($col != 'idEstado') { 
+                ?>
+                    <th><?= $col ?></th>
+                <?php 
+                    } 
+                endforeach; 
+                ?>
+                <th>Estado</th>
+            </tr>
+
+            <?php foreach ($lista as $fila): ?>
+                <tr>
+                    <td>
+                        <a href="menu.php?page=editar_producto&id=<?= $fila['idProducto'] ?>">
+                            <?= $fila['idProducto'] ?>
+                        </a>
+                    </td>
+
+                    <?php 
+                        foreach (array_slice($fila, 1, null, true) as $key => $valor): 
+                            if ($key != 'idEstado'):
+                    ?>
+                        <td><?= $valor ?></td>
+                    <?php 
+                            endif;
+                        endforeach; 
+                    ?>
+
+                    <td><?= ($fila['idEstado'] == 1) ? 'Activo' : 'Inactivo' ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </table>
+</div>
 
 <script>
-document.getElementById("buscar").onkeyup = function() {
-    let val = this.value.toLowerCase();
-    let filas = document.getElementById("tablaProductos").getElementsByTagName("tr");
-    for(let i=1; i<filas.length; i++) {
-        if(filas[i].cells.length > 1) filas[i].style.display = filas[i].innerText.toLowerCase().includes(val) ? "" : "none";
+let input = document.getElementById("buscar");
+let tabla = document.getElementById("tablaProductos");
+input.onkeyup = function() {
+    let texto = input.value.toLowerCase();
+    let filas = tabla.getElementsByTagName("tr");
+    for (let i = 1; i < filas.length; i++) { 
+        let filaTexto = filas[i].innerText.toLowerCase();
+        if (filaTexto.indexOf(texto) > -1) filas[i].style.display = ""; else filas[i].style.display = "none";
     }
-}
+};
 </script>

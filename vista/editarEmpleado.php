@@ -1,39 +1,64 @@
 <?php
-require_once __DIR__ . '/../Controlador/empleadoControlador.php';
-$control = new EmpleadoControlador();
-$id = $_GET["id"] ?? $_POST["idEmpleado"] ?? null;
+require_once("../Controlador/empleadoControlador.php");
 
+$control = new EmpleadoControlador();
+
+// SI ENVÍA FORMULARIO
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if ($control->actualizar($_POST["idEmpleado"], $_POST["idPersona"], $_POST["nombres"], $_POST["apellidos"], $_POST["dni"], $_POST["telefono"], $_POST["email"], $_POST["tipo"], $_POST["idEstado"])) {
-        echo "<script>window.location.href='menu.php?page=empleados&success=edit';</script>"; exit;
+
+    $idEmpleado = $_POST["idEmpleado"];
+    $idPersona = $_POST["idPersona"];
+    
+    $nombres = $_POST["nombres"];
+    $apellidos = $_POST["apellidos"];
+    $dni = $_POST["dni"];
+    $telefono = $_POST["telefono"];
+    $email = $_POST["email"];
+    $tipo = $_POST["tipo"]; // Cargo
+    $idEstado = $_POST["idEstado"];
+
+    if ($control->actualizar($idEmpleado, $idPersona, $nombres, $apellidos, $dni, $telefono, $email, $tipo, $idEstado)) {
+        echo "<script>window.location.href='menu.php?page=empleados&success=1';</script>"; 
+        exit;
     }
 }
-$e = ($id) ? $control->editar($id) : null;
-if (!$e) { echo "Empleado no encontrado."; return; }
+
+// SI ES GET
+$e = $control->editar($_GET["id"]);
 ?>
 
 <h2>Editar Empleado</h2>
-<a href="menu.php?page=empleados" class="btn btn-secondary mb-3">Volver</a>
 
-<div class="form-container" style="max-width: 600px;">
-    <form method="POST">
-        <input type="hidden" name="idEmpleado" value="<?= $e['idEmpleado'] ?>">
-        <input type="hidden" name="idPersona" value="<?= $e['idPersona'] ?>">
-        
-        <div class="form-inline mb-2">
-            <div class="form-group"><label>Nombres</label><input name="nombres" class="form-control" value="<?= $e['nombres'] ?>" required></div>
-            <div class="form-group"><label>Apellidos</label><input name="apellidos" class="form-control" value="<?= $e['apellidos'] ?>" required></div>
-        </div>
-        <div class="form-inline mb-2">
-            <div class="form-group"><label>DNI</label><input name="dni" class="form-control" value="<?= $e['dni'] ?>" required></div>
-            <div class="form-group"><label>Teléfono</label><input name="telefono" class="form-control" value="<?= $e['telefono'] ?>"></div>
-        </div>
-        <div class="form-group mb-2"><label>Email</label><input name="email" class="form-control" value="<?= $e['email'] ?>"></div>
-        <div class="form-inline mb-2">
-            <div class="form-group"><label>Cargo</label><input name="tipo" class="form-control" value="<?= $e['tipo'] ?>" required></div>
-            <div class="form-group"><label>Estado (1=Act, 0=Inac)</label><input type="number" name="idEstado" class="form-control" value="<?= $e['idEstado'] ?>" required></div>
-        </div>
+<form action="menu.php?page=editar_empleado" method="POST">
 
-        <button type="submit" class="btn btn-primary mt-3">Actualizar</button>
-    </form>
-</div>
+    <input type="hidden" name="idEmpleado" value="<?= $e['idEmpleado'] ?>">
+    <input type="hidden" name="idPersona" value="<?= $e['idPersona'] ?>">
+
+    <label>Nombres:</label>
+    <input type="text" name="nombres" value="<?= $e['nombres'] ?>" required><br><br>
+
+    <label>Apellidos:</label>
+    <input type="text" name="apellidos" value="<?= $e['apellidos'] ?>" required><br><br>
+
+    <label>DNI:</label>
+    <input type="text" name="dni" value="<?= $e['dni'] ?>" required><br><br>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" value="<?= $e['telefono'] ?>"><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="<?= $e['email'] ?>"><br><br>
+
+    <label>Cargo:</label>
+    <input type="text" name="tipo" value="<?= $e['tipo'] ?>" required><br><br>
+
+    <label>Estado:</label>
+    <select name="idEstado">
+        <option value="1" <?= $e['idEstado'] == 1 ? 'selected' : '' ?>>Activo</option>
+        <option value="0" <?= $e['idEstado'] == 0 ? 'selected' : '' ?>>Inactivo</option>
+    </select>
+    <br><br>
+
+    <button type="submit">Actualizar</button>
+
+</form>

@@ -29,7 +29,7 @@ class ProductoControlador {
         return $this->modelo->actualizar($id, $nombre, $unidad, $tipo, $cantidad, $fecha, $precioRef, $precioVenta, $umbral, $idCategoria, $idEstado);
     }
 
-    // --- NUEVO: CAMBIAR ESTADO ---
+    
     public function cambiarEstado($id, $nuevoEstado) {
         return $this->modelo->cambiarEstado($id, $nuevoEstado);
     }
