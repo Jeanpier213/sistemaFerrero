@@ -14,7 +14,7 @@ class loginControlador
     public function iniciarSesion()
     {
         if (!isset($_POST["username"]) || !isset($_POST["password"])) {
-            header("Location: ../Vistas/login.php?error=Completa los campos");
+            header("Location: ../Vistas/login_vista.php?error=Completa los campos");
             exit();
         }
 
@@ -24,17 +24,17 @@ class loginControlador
         $usuario = $this->modelo->buscarPorUsername($username);
 
         if (!$usuario) {
-            header("Location: ../Vistas/login.php?error=Usuario no encontrado");
+            header("Location: ../Vistas/login_vista.php?error=Usuario no encontrado");
             exit();
         }
 
         if ($usuario["idEstado"] == 0) {
-            header("Location: ../Vistas/login.php?error=Usuario desactivado");
+            header("Location: ../Vistas/login_vista.php?error=Usuario desactivado");
             exit();
         }
 
         if (!password_verify($password, $usuario["passwordHash"])) {
-            header("Location: ../Vistas/login.php?error=Contraseña incorrecta");
+            header("Location: ../Vistas/login_vista.php?error=Contraseña incorrecta");
             exit();
         }
 
