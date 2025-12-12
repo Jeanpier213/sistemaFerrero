@@ -3,13 +3,13 @@ require_once("../Controlador/CategoriaControlador.php");
 
 $control = new CategoriaControlador();
 
-// Listar todas las categorías
+
 $categorias = $control->listar();
 
-// Columnas de la tabla
+
 $columnas = $control->obtenerColumnas();
 
-// Guardar nueva categoría
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     $nombre = $_POST["nombre"];
     $descripcion = $_POST["descripcion"];
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 
 <h1><b>Categorías</b></h1>
 
-<!-- Input de búsqueda -->
+
 <input type="text" id="buscar" placeholder="Buscar categoría..." autocomplete="off">
 <br><br>
 
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     <p style="color: green;">Categoría guardada correctamente</p>
 <?php endif; ?>
 
-<!-- Formulario para agregar categoría -->
+
 <div>
 <form action="menu.php?page=categorias" method="POST">
     <label>Nombre:</label>
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 </form>
 </div>
 
-<!-- Tabla de categorías -->
+
 <div>
 <table id="tablaProductos" border="1">
     <tr>
@@ -81,7 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 </table>
 </div>
 
-<!-- Script para filtrar tabla en tiempo real -->
+
+
+
+
+
 <script>
 let input = document.getElementById("buscar");
 let tabla = document.getElementById("tablaProductos");

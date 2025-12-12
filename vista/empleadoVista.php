@@ -3,9 +3,15 @@ require_once("../Controlador/empleadoControlador.php");
 
 $control = new EmpleadoControlador();
 
-$lista = $control->listar();
 
-// GUARDAR
+$texto = $_POST["buscar"] ?? "";
+if (isset($_POST["buscar"])) {
+    $lista = $control->buscar($_POST["buscar"]);
+} else {
+    $lista = $control->listar();
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
     
     $nombres = $_POST["nombres"];
@@ -66,30 +72,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
             <tr>
                 <?php 
                 $columnas = array_keys($lista[0]); 
-                foreach ($columnas as $col): 
-                    
+                foreach ($columnas as $col):    
                     if ($col != 'idEstado') { 
                 ?>
                     <th><?= $col ?></th>
                 <?php 
                     } 
                 endforeach; 
-                ?>
-                
+                ?>                
                 <th>Estado</th>
             </tr>
-
             <?php foreach ($lista as $fila): ?>
-                <tr>
-                    
+                <tr>          
                     <td>
                         <a href="menu.php?page=editar_empleado&id=<?= $fila['idEmpleado'] ?>">
                             <?= $fila['idEmpleado'] ?>
                         </a>
                     </td>
-
-                    <?php 
-                        
+                    <?php                        
                         foreach (array_slice($fila, 1, null, true) as $key => $valor): 
                             if ($key != 'idEstado'):
                     ?>
@@ -98,11 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
                             endif;
                         endforeach; 
                     ?>
-
                     <td>
                         <?= ($fila['idEstado'] == 1) ? 'Activo' : 'Inactivo' ?>
                     </td>
-
                 </tr>
             <?php endforeach; ?>
             
@@ -111,6 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
         <?php endif; ?>
     </table>
 </div>
+
+
+
+
 
 <script>
 let input = document.getElementById("buscar");

@@ -11,7 +11,7 @@ class loginControlador
         $this->modelo = new Usuario();
     }
 
-    // Método que recibe usuario y contraseña como parámetros
+   
     public function iniciarSesion($username, $password)
     {
         if (!$username || !$password) {
@@ -32,14 +32,13 @@ class loginControlador
             return "Contraseña incorrecta";
         }
 
-        // Guardar sesión
         $_SESSION["usuario"] = $usuario["trabajadorNombre"];
         $_SESSION["idUsuario"] = $usuario["idUsuario"];
 
         return true;
     }
 
-    // Método para cerrar sesión
+
     public function cerrarSesion()
     {
         session_unset();

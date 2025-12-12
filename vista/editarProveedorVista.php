@@ -3,20 +3,20 @@ require_once("../Controlador/proveedorControlador.php");
 
 $control = new ProveedorControlador();
 
-// SI ENVÍA FORMULARIO
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $idProv = $_POST['idProveedor'];
     $idPers = $_POST['idPersona'];
     
-    // Datos Contacto
+    
     $nom = $_POST['nombres'];
     $ape = $_POST['apellidos'];
     $dni = $_POST['dni'];
     $tel = $_POST['telefono'];
     $email = $_POST['email'];
     
-    // Datos Empresa
+ 
     $razon = $_POST['razonSocial'];
     $ruc = $_POST['ruc'];
     $dir = $_POST['direccion'];
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// SI ES GET
+
 $p = $control->editar($_GET["id"]);
 ?>
 

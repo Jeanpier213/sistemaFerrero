@@ -3,7 +3,7 @@ require_once("../Controlador/CategoriaControlador.php");
 
 $control = new CategoriaControlador();
 
-// SI ENVÍA FORMULARIO
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $id = $_POST["idCategoria"];
@@ -18,7 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// SI ES GET
 $categoria = $control->editar($_GET["id"]);
 ?>
 

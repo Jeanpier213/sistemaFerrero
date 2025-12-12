@@ -3,7 +3,7 @@ require_once("../Controlador/empleadoControlador.php");
 
 $control = new EmpleadoControlador();
 
-// SI ENVÍA FORMULARIO
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $idEmpleado = $_POST["idEmpleado"];
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $dni = $_POST["dni"];
     $telefono = $_POST["telefono"];
     $email = $_POST["email"];
-    $tipo = $_POST["tipo"]; // Cargo
+    $tipo = $_POST["tipo"]; 
     $idEstado = $_POST["idEstado"];
 
     if ($control->actualizar($idEmpleado, $idPersona, $nombres, $apellidos, $dni, $telefono, $email, $tipo, $idEstado)) {
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// SI ES GET
+
 $e = $control->editar($_GET["id"]);
 ?>
 

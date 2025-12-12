@@ -3,12 +3,12 @@ require_once("../Controlador/ProductoControlador.php");
 
 $control = new ProductoControlador();
 
-// SI ENVÍA FORMULARIO
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $id = $_POST["idProducto"];
     
-    // Recolectar datos
+  
     $nombre = $_POST["nombre"];
     $unidad = $_POST["unidadMedida"];
     $tipo = $_POST["tipo"];
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// SI ES GET (CARGAR DATOS)
+
 $p = $control->editar($_GET["id"]);
 ?>
 
