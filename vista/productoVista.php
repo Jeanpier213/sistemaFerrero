@@ -3,6 +3,7 @@ require_once("../Controlador/productoControlador.php");
 
 $control = new ProductoControlador();
 
+$lista = $control->listar();
 
 // GUARDAR (Estructura idéntica a tu ejemplo)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {

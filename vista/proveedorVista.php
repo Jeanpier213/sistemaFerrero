@@ -3,6 +3,7 @@ require_once("../Controlador/ProveedorControlador.php");
 
 $control = new ProveedorControlador();
 
+$lista = $control->listar();
 
 // GUARDAR
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["razonSocial"])) {

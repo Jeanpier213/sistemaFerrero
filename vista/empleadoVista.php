@@ -3,6 +3,8 @@ require_once("../Controlador/empleadoControlador.php");
 
 $control = new EmpleadoControlador();
 
+$lista = $control->listar();
+
 // GUARDAR
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
     

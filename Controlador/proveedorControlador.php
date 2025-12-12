@@ -6,7 +6,9 @@ class ProveedorControlador {
 
     public function __construct() { $this->modelo = new Proveedor(); }
 
-    public function listar() { return $this->modelo->listar(); }
+    public function listar() { 
+        return $this->modelo->listar(); 
+    }
 
     public function guardar($nombres, $apellidos, $dni, $telefono, $email, $razonSocial, $ruc, $direccion, $tipoProd) {
         return $this->modelo->agregar($nombres, $apellidos, $dni, $telefono, $email, $razonSocial, $ruc, $direccion, $tipoProd);
