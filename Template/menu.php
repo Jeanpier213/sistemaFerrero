@@ -1,9 +1,8 @@
 <?php
 session_start();
 
-// Verificar si hay usuario logueado
 if (!isset($_SESSION['idUsuario'])) {
-    // No hay sesión activa, redirigir al login
+  
     header("Location: ../Vista/login_vista.php");
     exit();
 }
