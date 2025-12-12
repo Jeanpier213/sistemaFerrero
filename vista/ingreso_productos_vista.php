@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guardar"])) {
         );
 
         if ($exito) {
-            header("Location: menu.php?page=inventario&msg=exito");
+            header("Location: menu.php?page=entrada&msg=exito");
             exit;
         } else {
             $mensaje = "Añada al menos un producto válido.";
@@ -137,7 +137,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exito') {
                     echo "<tr>";
                     for ($i = 0; $i < $columnCount; $i++) {
                         if ($i == 0) {
-                            echo "<td><a href='ingresodetalle.php?id=" . $row[$i] . "'>" . $row[$i] . "</a></td>";
+                            echo "<td><a href='ingreso_productos_vista.php?id=" . $row[$i] . "'>" . $row[$i] . "</a></td>";
                         } else {
                             echo "<td>" . $row[$i] . "</td>";
                         }
