@@ -1,19 +1,37 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <?php
+<?php
 require_once("../Controlador/salidaControlador.php");
 require_once("../Controlador/productoControlador.php");
 require_once("../Controlador/empleadoControlador.php");
 
-// instancias
+// Instancias
 $salidaCtrl = new salidaControlador();
 $productoCtrl = new productoControlador();
 $empleadoCtrl = new empleadoControlador();
 
-// datos
+// Datos
 $columnasSalida = $salidaCtrl->obtenerColumnasSalida();
 $columnasDetalle = $salidaCtrl->obtenerColumnasDetalle();
-$productos = $productoCtrl->listar();   // debes tener método listar()
-$empleados = $empleadoCtrl->listar();   // idem
+$productos = $productoCtrl->listar();
+$empleados = $empleadoCtrl->listar();
 $salidas = $salidaCtrl->listarSalidasConDetalle();
+
+// Procesar formulario de registro
+if (isset($_POST['fecha'])) {
+    $fecha        = $_POST['fecha'];
+    $idTrabajador = $_POST['idTrabajador'];
+    $motivo       = $_POST['motivo'];
+    $detalles     = $_POST['detalle'];
+
+    $ok = $salidaCtrl->agregar($fecha, $idTrabajador, $motivo, $detalles);
+
+    if ($ok) {
+        echo "<p>Salida registrada correctamente.</p>";
+        // Actualizar listado después de agregar
+        $salidas = $salidaCtrl->listarSalidasConDetalle();
+    } else {
+        echo "<p>Error al registrar la salida.</p>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -21,14 +39,12 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
 <head>
 <meta charset="UTF-8">
 <title>Registro de Salidas</title>
-
 </head>
-
 <body>
 
 <h2>Registrar Nueva Salida</h2>
 
-<form action="menu.php?page=salidas" method="POST">
+<form action="" method="POST">
 
     Fecha: <input type="date" name="fecha" required><br>
 
@@ -40,9 +56,7 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
                 <?= $e['nombres'] . " " . $e['apellidos'] ?>
             </option>
         <?php endforeach; ?>
-    </select>
-
-    <br>
+    </select><br>
 
     Motivo:
     <select name="motivo">
@@ -52,27 +66,20 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
     </select>
 
     <h3>Agregar Detalles</h3>
-
     <table>
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-        </tr>
-
-        <!-- 3 filas para agregar detalles -->
+        <tr><th>Producto</th><th>Cantidad</th></tr>
         <?php for ($i = 0; $i < 10; $i++): ?>
             <tr>
                 <td>
-                    <select name="detalle[<?= $i ?>][idProducto]" >
+                    <select name="detalle[<?= $i ?>][idProducto]">
                         <option value="">Seleccione</option>
                         <?php foreach ($productos as $p): ?>
-                            <option value="<?= $p['idProducto'] ?>"  >
+                            <option value="<?= $p['idProducto'] ?>">
                                 <?= $p['nombre'] ?> (Stock: <?= $p['cantidadTotal'] ?>)
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
-
                 <td>
                     <input type="number" min="1" name="detalle[<?= $i ?>][cantidad]" placeholder="0">
                 </td>
@@ -80,46 +87,43 @@ $salidas = $salidaCtrl->listarSalidasConDetalle();
         <?php endfor; ?>
     </table>
 
-    <button class="btn">Registrar Salida</button>
+    <button type="submit">Registrar Salida</button>
 </form>
-
 
 <br><br>
 
 <h2>Listado Completo de Salidas</h2>
 
 <?php 
-unset($columnasSalida[0]); // elimina la segunda columna
-unset($columnasDetalle[1]); // elimina la segunda columna
-unset($columnasDetalle[0]); // elimina la segunda columna
-
+unset($columnasSalida[0]); // eliminar idSalida
+unset($columnasDetalle[0]);
+unset($columnasDetalle[1]);
 ?>
-<table>
+
+<table border="1">
     <tr>
-        <!-- columnas automáticas -->
         <?php foreach ($columnasSalida as $col): ?>
             <th><?= $col ?></th>
         <?php endforeach; ?>
         <?php foreach ($columnasDetalle as $col): ?>
             <th><?= $col ?></th>
         <?php endforeach; ?>
-          <th> Acciones</th>
+        <th>Acciones</th>
     </tr>
 
-   <?php for ($i = 0; $i < count($salidas); $i++): ?>
-<tr>
-
-    <td><?= $salidas[$i]['fecha'] ?></td>
-
-    <td><?= $salidas[$i]['idEmpleado'] ?></td>
-        <td><?= $salidas[$i]['motivo'] ?></td>
-    <td><?= $salidas[$i]['idProducto'] ?></td>
-    <td><?= $salidas[$i]['cantidadSalida'] ?></td>
-    <td>
-        <a href="menu.php?page=editar_salidas&id=<?= $salidas[$i]['idSalida'] ?>">Editar</a>
-</tr>
-<?php endfor; ?>
+    <?php foreach ($salidas as $s): ?>
+        <tr>
+            <td><?= $s['fecha'] ?></td>
+            <td><?= $s['idEmpleado'] ?></td>
+            <td><?= $s['motivo'] ?></td>
+            <td><?= $s['idProducto'] ?></td>
+            <td><?= $s['cantidadSalida'] ?></td>
+            <td>
+                <a href="menu.php?page=editar_salidas&id=<?= $s['idSalida'] ?>">Editar</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
 </table>
 
 </body>
-</html
+</html>

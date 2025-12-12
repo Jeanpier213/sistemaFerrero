@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // REDIRECCIÓN A TU LOGIN
             echo "<script>
                     alert('Usuario creado con éxito. Ahora inicia sesión.');
-                    window.location.href='login_vista.php'; 
+                    window.location.href='menu.php?page=usuarios'; 
                   </script>";
             exit;
         } elseif ($resultado === "user_existe") {
@@ -73,9 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <button type="submit" class="btn-guardar">Registrarse</button>
             
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="login_vista.php">Volver al Login</a>
-            </div>
+         
 
         </form>
 

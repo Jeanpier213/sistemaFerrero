@@ -13,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($control->actualizar($id, $nombre, $descripcion, $idEstado)) {
    
-        echo "<script>window.location.href='menu.php?page=categorias&success=1';</script>"; exit;
-        exit;
+        header("Location: menu.php?page=categorias&success=1");
+        exit();
     }
 }
 

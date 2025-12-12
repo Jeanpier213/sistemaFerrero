@@ -20,6 +20,7 @@
             <a class="nav-link" href="menu.php?page=empleados"><i class="bi bi-person-badge"></i> Empleados</a>
             <a class="nav-link" href="menu.php?page=categorias"><i class="bi bi-tags"></i> Categorías</a>
             <a class="nav-link" href="menu.php?page=proveedor"><i class="bi bi-tags"></i> Proveedores</a>
+            <a class="nav-link" href="menu.php?page=usuarios"><i class="bi bi-tags"></i> Usuarios</a>  
             <hr>
             <p><b>Inventario</b></p>
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi-clipboard-plus"></i> Entradas</a>
@@ -50,6 +51,9 @@
                 break;
             case 'editar_empleado':
                 include_once "../vista/editarEmpleado.php";
+                break;
+                case 'usuarios':
+                include_once "../vista/usuarioVista.php";
                 break;
             case 'proveedor':
                 include_once "../vista/proveedorVista.php";

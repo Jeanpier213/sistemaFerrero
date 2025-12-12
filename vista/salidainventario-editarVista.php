@@ -1,57 +1,69 @@
 <?php
 require_once("../Controlador/salidaControlador.php");
 require_once("../Controlador/productoControlador.php");
-require_once("../Controlador/empleadoControlador.php");
 
-// instancias
+// Instancias
 $salidaCtrl = new salidaControlador();
 $productoCtrl = new productoControlador();
 
-// obtener id
-$idSalida = $_GET["id"];
+// Obtener id
+$idSalida = $_GET["id"] ?? null;
 
-// obtener la salida + detalles
+if (!$idSalida) {
+    die("ID de salida no proporcionado");
+}
+
+// Obtener salida y detalles
 $salida = $salidaCtrl->obtenerSalidaPorId($idSalida);
 
-// validar
 if (!$salida) {
     die("Salida no encontrada");
 }
 
-// productos disponibles
+// Productos disponibles
 $productos = $productoCtrl->listar();
 
-// datos generales (todos los registros traen lo mismo)
+// Datos generales
 $motivoActual = $salida[0]["motivo"];
 $fecha = $salida[0]["fecha"];
 $idTrabajador = $salida[0]["idTrabajador"];
 
+// Procesar formulario de edición
+if (isset($_POST['motivo'])) {
+    $motivo   = $_POST['motivo'];
+    $detalles = $_POST['detalle'];
 
+    $ok = $salidaCtrl->editar($idSalida, $motivo, $detalles);
+
+    if ($ok) {
+        echo "<p>Salida editada correctamente.</p>";
+        // Recargar detalles actualizados
+        $salida = $salidaCtrl->obtenerSalidaPorId($idSalida);
+        header("Location: menu.php?page=salidas&success=1");
+        exit();
+    } else {
+        echo "<p>Error al editar la salida.</p>";
+    }
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <title>Editar Salida</title>
-
 </head>
-
 <body>
 
 <h2>Editar Salida #<?= $idSalida ?></h2>
 
-<form action="../Controlador/salidaControlador.php" method="POST">
-
-    <input type="hidden" name="accion" value="editar">
-    <input type="hidden" name="idSalida" value="<?= $idSalida ?>">
+<form action="" method="POST">
 
     Fecha:  
-    <input type="date"  name="fecha" value="<?= $fecha ?>" disabled><br><br>
+    <input type="date" name="fecha" value="<?= $fecha ?>" disabled><br><br>
 
     Trabajador:  
-    <input type="text"  name="idTrabajador" value="<?= $idTrabajador ?>" disabled><br><br>
+    <input type="text" name="idTrabajador" value="<?= $idTrabajador ?>" disabled><br><br>
 
     Motivo:
     <select name="motivo" required>
@@ -61,7 +73,6 @@ $idTrabajador = $salida[0]["idTrabajador"];
     </select>
 
     <h3>Editar Detalles</h3>
-
     <table>
         <tr>
             <th>Producto</th>
@@ -69,29 +80,27 @@ $idTrabajador = $salida[0]["idTrabajador"];
         </tr>
 
         <?php foreach ($salida as $i => $det): ?>
-        <tr>
-            <td>
-                <select name="detalle[<?= $i ?>][idProducto]" required>
-                    <option value="">Seleccione</option>
-                    <?php foreach ($productos as $p): ?>
-                        <option value="<?= $p['idProducto'] ?>"
-                            <?= $p['idProducto']==$det['idProducto'] ? "selected" : "" ?>>
-                            <?= $p['nombre'] ?> (Stock: <?= $p['cantidadTotal'] ?>)
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </td>
-
-            <td>
-                <input type="number" min="1" required
-                       name="detalle[<?= $i ?>][cantidad]"
-                       value="<?= $det['cantidad'] ?>">
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <select name="detalle[<?= $i ?>][idProducto]" required>
+                        <option value="">Seleccione</option>
+                        <?php foreach ($productos as $p): ?>
+                            <option value="<?= $p['idProducto'] ?>"
+                                <?= $p['idProducto'] == $det['idProducto'] ? "selected" : "" ?>>
+                                <?= $p['nombre'] ?> (Stock: <?= $p['cantidadTotal'] ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" min="1" name="detalle[<?= $i ?>][cantidad]" 
+                           value="<?= $det['cantidad'] ?>" required>
+                </td>
+            </tr>
         <?php endforeach; ?>
     </table>
 
-    <button class="btn">Guardar Cambios</button>
+    <button type="submit">Guardar Cambios</button>
 </form>
 
 </body>

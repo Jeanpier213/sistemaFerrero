@@ -8,43 +8,26 @@ class salidaControlador {
         $this->modelo = new Salida();
     }
 
-    public function obtenerColumnasSalida() { return $this->modelo->obtenerColumnasSalida(); }
-    public function obtenerColumnasDetalle() { return $this->modelo->obtenerColumnasDetalle(); }
-    public function listarSalidasConDetalle() { return $this->modelo->listarSalidasConDetalle(); }
-    public function obtenerSalidaPorId($id) { return $this->modelo->obtenerSalidaConDetallePorId($id); }
+    public function obtenerColumnasSalida() {
+        return $this->modelo->obtenerColumnasSalida();
+    }
 
-    public function registrar() {
+    public function obtenerColumnasDetalle() {
+        return $this->modelo->obtenerColumnasDetalle();
+    }
 
-        // Si proviene de la vista de edición:
-        if (isset($_POST["accion"]) && $_POST["accion"] === "editar") {
+    public function listarSalidasConDetalle() {
+        return $this->modelo->listarSalidasConDetalle();
+    }
 
-            $idSalida = $_POST["idSalida"];
-            $motivo   = $_POST["motivo"];
-            $detalles = $_POST["detalle"];
+    public function obtenerSalidaPorId($id) {
+        return $this->modelo->obtenerSalidaConDetallePorId($id);
+    }
 
-            $filtrados = [];
-            foreach ($detalles as $d) {
-                if (!empty($d["idProducto"]) && !empty($d["cantidad"])) {
-                    $filtrados[] = $d;
-                }
-            }
-
-            $this->modelo->editarSalidaConDetalle($idSalida, $motivo, $filtrados);
-
-            header("Location: ../Template/menu.php?page=salidas");
-            exit();
-        }
-
-        // REGISTRO NORMAL
-        $fecha       = $_POST["fecha"] ?? null;
-        $idTrabajador = $_POST["idTrabajador"] ?? null;
-        $motivo       = $_POST["motivo"] ?? null;
-        $detalles     = $_POST["detalle"] ?? [];
-
-        if (!$fecha || !$idTrabajador) {
-            die("ERROR: Fecha y trabajador son obligatorios");
-        }
-
+    // =====================================================
+    // Método para agregar nueva salida
+    // =====================================================
+    public function agregar($fecha, $idTrabajador, $motivo, $detalles) {
         $detallesFiltrados = [];
         foreach ($detalles as $d) {
             if (!empty($d["idProducto"]) && !empty($d["cantidad"])) {
@@ -52,16 +35,29 @@ class salidaControlador {
             }
         }
 
-        $this->modelo->registrarSalidaConDetalle($fecha, $idTrabajador, $motivo, $detallesFiltrados);
+        return $this->modelo->registrarSalidaConDetalle(
+            $fecha,
+            $idTrabajador,
+            $motivo,
+            $detallesFiltrados
+        );
+    }
 
-        header("Location: ../Template/menu.php?page=salidas");
-        exit();
+    // =====================================================
+    // Método para editar una salida existente
+    // =====================================================
+    public function editar($idSalida, $motivo, $detalles) {
+        $detallesFiltrados = [];
+        foreach ($detalles as $d) {
+            if (!empty($d["idProducto"]) && !empty($d["cantidad"])) {
+                $detallesFiltrados[] = $d;
+            }
+        }
+
+        return $this->modelo->editarSalidaConDetalle(
+            $idSalida,
+            $motivo,
+            $detallesFiltrados
+        );
     }
 }
-
-// AUTO-EJECUCIÓN
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $ctrl = new salidaControlador();
-    $ctrl->registrar();
-}
-?>
