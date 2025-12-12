@@ -21,8 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $idEst = $_POST["idEstado"];
 
     if ($control->actualizar($id, $nombre, $unidad, $tipo, $cantidad, $fecha, $pRef, $pVenta, $umbral, $idCat, $idEst)) {
-        echo "<script>window.location.href='menu.php?page=productos&success=1';</script>"; 
+        header("Location: menu.php?page=productos&success=1");
         exit;
+
     }
 }
 

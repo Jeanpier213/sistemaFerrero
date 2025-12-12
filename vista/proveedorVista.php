@@ -26,12 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["razonSocial"])) {
     $tipoProductos = $_POST["tipoProductos"];
 
     if ($control->guardar($nombres, $apellidos, $dni, $telefono, $email, $razonSocial, $ruc, $direccion, $tipoProductos)) {
-        echo "<script>window.location.href='menu.php?page=proveedor&success=1';</script>"; 
-        exit;
-    } else {
-        
-        echo "<script>alert('Error al guardar. Verifica que el DNI o RUC no estén repetidos.');</script>";
+        header("Location: menu.php?page=proveedor&success=1");
+        exit; 
     }
+    
 }
 ?>
 

@@ -17,10 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($resultado === "exito") {
             // REDIRECCIÓN A TU LOGIN
-            echo "<script>
+            header("Location: menu.php?page=usuarios");
+            echo "
                     alert('Usuario creado con éxito. Ahora inicia sesión.');
                     window.location.href='menu.php?page=usuarios'; 
-                  </script>";
+                ";
             exit;
         } elseif ($resultado === "user_existe") {
             $mensaje = "El usuario ya existe.";

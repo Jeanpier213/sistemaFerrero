@@ -18,8 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $idEstado = $_POST["idEstado"];
 
     if ($control->actualizar($idEmpleado, $idPersona, $nombres, $apellidos, $dni, $telefono, $email, $tipo, $idEstado)) {
-        echo "<script>window.location.href='menu.php?page=empleados&success=1';</script>"; 
+        header("Location: menu.php?page=empleados&success=1");
         exit;
+
     }
 }
 

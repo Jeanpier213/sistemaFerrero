@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     $idEstado = 1; 
 
     if ($control->guardar($nombre, $unidadMedida, $tipo, $cantidadTotal, $fechaCaducidad, $precioReferencial, $precioVenta, $umbralMinimo, $idCategoria, $idEstado)) {
+        header("Location: menu.php?page=productos&success=1");  
         
-        echo "<script>window.location.href='menu.php?page=productos&success=1';</script>"; 
         exit;
     }
 }

@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $est = $_POST['idEstado'];
 
     if ($control->actualizar($idProv, $idPers, $nom, $ape, $dni, $tel, $email, $razon, $ruc, $dir, $tipoProd, $est)) {
-        echo "<script>window.location.href='menu.php?page=proveedor&success=1';</script>"; 
+        header("Location: menu.php?page=proveedor&success=1");
         exit;
     }
 }

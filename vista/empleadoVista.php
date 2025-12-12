@@ -22,8 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
     $tipo = $_POST["tipo"];
 
     if ($control->guardar($nombres, $apellidos, $dni, $telefono, $email, $tipo)) {
-        echo "<script>window.location.href='menu.php?page=empleados&success=1';</script>"; 
+        header("Location: menu.php?page=empleados&success=1");
         exit;
+        
     }
 }
 ?>
