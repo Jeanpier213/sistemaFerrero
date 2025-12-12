@@ -22,7 +22,10 @@ if (!isset($_SESSION['idUsuario'])) {
 <body>
 
     <div class="sidebar p-3 d-flex flex-column">
-        <h4 class="text-center mb-4">🛠️ Ferretería</h4>
+        <h4 class="text-center mb-4">
+    <img src="../src/image/img-santos.png" alt="Logo Ferretería" style="width:90px; height:90px; vertical-align:middle; margin-right:8px;">
+   
+     </h4>
         <hr>
         <nav class="nav flex-column mb-auto">
             <a class="nav-link" href="menu.php?page=inicio"><i class="bi bi-house-door"></i> Inicio</a>

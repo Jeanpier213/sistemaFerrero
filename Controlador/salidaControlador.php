@@ -24,9 +24,7 @@ class salidaControlador {
         return $this->modelo->obtenerSalidaConDetallePorId($id);
     }
 
-    // =====================================================
-    // Método para agregar nueva salida
-    // =====================================================
+   
     public function agregar($fecha, $idTrabajador, $motivo, $detalles) {
         $detallesFiltrados = [];
         foreach ($detalles as $d) {
@@ -43,9 +41,6 @@ class salidaControlador {
         );
     }
 
-    // =====================================================
-    // Método para editar una salida existente
-    // =====================================================
     public function editar($idSalida, $motivo, $detalles) {
         $detallesFiltrados = [];
         foreach ($detalles as $d) {
