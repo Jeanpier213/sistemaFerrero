@@ -5,7 +5,7 @@ $control = new ProveedorControlador();
 
 $lista = $control->listar();
 
-// GUARDAR
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["razonSocial"])) {
 
     $nombres = $_POST["nombres"];

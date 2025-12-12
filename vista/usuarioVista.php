@@ -4,7 +4,7 @@ require_once("../Controlador/UsuarioControlador.php");
 $control = new UsuarioControlador();
 $mensaje = "";
 
-// GUARDAR
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $idTrabajador = $_POST["idTrabajador"];
@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $resultado = $control->registrar($idTrabajador, $username, $password);
 
         if ($resultado === "exito") {
-            // REDIRECCIÓN A TU LOGIN
+            
             header("Location: menu.php?page=usuarios");
             echo "
                     alert('Usuario creado con éxito. Ahora inicia sesión.');

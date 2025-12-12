@@ -2,28 +2,28 @@
 require_once("../Controlador/salidaControlador.php");
 require_once("../Controlador/productoControlador.php");
 
-// Instancias
+
 $salidaCtrl = new salidaControlador();
 $productoCtrl = new productoControlador();
 
-// Obtener id
+
 $idSalida = $_GET["id"] ?? null;
 
 
 
-// Obtener salida y detalles
+
 $salida = $salidaCtrl->obtenerSalidaPorId($idSalida);
 
 
-// Productos disponibles
+
 $productos = $productoCtrl->listar();
 
-// Datos generales
+
 $motivoActual = $salida[0]["motivo"];
 $fecha = $salida[0]["fecha"];
 $idTrabajador = $salida[0]["idTrabajador"];
 
-// Procesar formulario de edición
+
 if (isset($_POST['motivo'])) {
     $motivo   = $_POST['motivo'];
     $detalles = $_POST['detalle'];
@@ -32,7 +32,7 @@ if (isset($_POST['motivo'])) {
 
     if ($ok) {
         echo "<p>Salida editada correctamente.</p>";
-        // Recargar detalles actualizados
+        
         $salida = $salidaCtrl->obtenerSalidaPorId($idSalida);
         header("Location: menu.php?page=salidas&success=1");
         exit();
