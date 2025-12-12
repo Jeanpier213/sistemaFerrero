@@ -3,19 +3,19 @@ require_once("../Controlador/salidaControlador.php");
 require_once("../Controlador/productoControlador.php");
 require_once("../Controlador/empleadoControlador.php");
 
-// Instancias
+
 $salidaCtrl = new salidaControlador();
 $productoCtrl = new productoControlador();
 $empleadoCtrl = new empleadoControlador();
 
-// Datos
+
 $columnasSalida = $salidaCtrl->obtenerColumnasSalida();
 $columnasDetalle = $salidaCtrl->obtenerColumnasDetalle();
 $productos = $productoCtrl->listar();
 $empleados = $empleadoCtrl->listar();
 $salidas = $salidaCtrl->listarSalidasConDetalle();
 
-// Procesar formulario de registro
+
 if (isset($_POST['fecha'])) {
     $fecha        = $_POST['fecha'];
     $idTrabajador = $_POST['idTrabajador'];
@@ -26,7 +26,7 @@ if (isset($_POST['fecha'])) {
 
     if ($ok) {
         echo "<p>Salida registrada correctamente.</p>";
-        // Actualizar listado después de agregar
+      
         $salidas = $salidaCtrl->listarSalidasConDetalle();
     } else {
         echo "<p>Error al registrar la salida.</p>";
@@ -95,7 +95,7 @@ if (isset($_POST['fecha'])) {
 <h2>Listado Completo de Salidas</h2>
 
 <?php 
-unset($columnasSalida[0]); // eliminar idSalida
+unset($columnasSalida[0]);
 unset($columnasDetalle[0]);
 unset($columnasDetalle[1]);
 ?>

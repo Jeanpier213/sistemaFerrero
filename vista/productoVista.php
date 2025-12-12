@@ -5,7 +5,7 @@ $control = new ProductoControlador();
 
 $lista = $control->listar();
 
-// GUARDAR (Estructura idéntica a tu ejemplo)
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 
     $nombre = $_POST["nombre"];
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     $umbralMinimo = $_POST["umbralMinimo"];
     $idCategoria = $_POST["idCategoria"];
     
-    // Por defecto al crear es 1 (Activo), o si lo mandas en hidden
+    
     $idEstado = 1; 
 
     if ($control->guardar($nombre, $unidadMedida, $tipo, $cantidadTotal, $fechaCaducidad, $precioReferencial, $precioVenta, $umbralMinimo, $idCategoria, $idEstado)) {

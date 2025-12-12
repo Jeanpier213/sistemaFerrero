@@ -1,17 +1,17 @@
 <?php
 require_once("../Controlador/login_controlador.php");
 
-// instanciamos el controlador
+
 $ctrl = new loginControlador();
 $resultado = "";
-// Manejo del POST directamente en la vista
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Guardamos los campos POST en variables
+    
     $username = $_POST["username"] ?? "";
     $password = $_POST["password"] ?? "";
 
-    // Llamamos al método del controlador
+  
     $resultado = $ctrl->iniciarSesion($username, $password);
 
     if ($resultado === true) {
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <h2>Iniciar Sesión</h2>
 
-    <!-- Mostrar errores si existen -->
+ 
     <?php if ($resultado !== "" && $resultado !== true): ?>
         <div class="error"><?= htmlspecialchars($resultado) ?></div>
     <?php endif; ?>

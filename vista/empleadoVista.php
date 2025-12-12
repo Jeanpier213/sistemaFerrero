@@ -98,9 +98,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
                             endif;
                         endforeach; 
                     ?>
+
                     <td>
                         <?= ($fila['idEstado'] == 1) ? 'Activo' : 'Inactivo' ?>
                     </td>
+
                 </tr>
             <?php endforeach; ?>
             
@@ -109,10 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
         <?php endif; ?>
     </table>
 </div>
-
-
-
-
 
 <script>
 let input = document.getElementById("buscar");
