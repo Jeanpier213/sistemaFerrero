@@ -3,14 +3,6 @@ require_once("../Controlador/empleadoControlador.php");
 
 $control = new EmpleadoControlador();
 
-// BUSCAR
-$texto = $_POST["buscar"] ?? "";
-if (isset($_POST["buscar"])) {
-    $lista = $control->buscar($_POST["buscar"]);
-} else {
-    $lista = $control->listar();
-}
-
 // GUARDAR
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombres"])) {
     

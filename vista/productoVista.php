@@ -3,13 +3,6 @@ require_once("../Controlador/productoControlador.php");
 
 $control = new ProductoControlador();
 
-// BUSCAR
-$texto = $_POST["buscar"] ?? "";
-if (isset($_POST["buscar"])) {
-    $lista = $control->buscar($_POST["buscar"]);
-} else {
-    $lista = $control->listar();
-}
 
 // GUARDAR (Estructura idéntica a tu ejemplo)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
