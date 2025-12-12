@@ -11,43 +11,41 @@ class loginControlador
         $this->modelo = new Usuario();
     }
 
-    public function iniciarSesion()
+    // Método que recibe usuario y contraseña como parámetros
+    public function iniciarSesion($username, $password)
     {
-        if (!isset($_POST["username"]) || !isset($_POST["password"])) {
-            header("Location: ../Vistas/login_vista.php?error=Completa los campos");
-            exit();
+        if (!$username || !$password) {
+            return "Completa los campos";
         }
-
-        $username = $_POST["username"];
-        $password = $_POST["password"];
 
         $usuario = $this->modelo->buscarPorUsername($username);
 
         if (!$usuario) {
-            header("Location: ../Vista/login_vista.php?error=Usuario no encontrado");
-            exit();
+            return "Usuario no encontrado";
         }
 
         if ($usuario["idEstado"] == 0) {
-            header("Location: ../Vista/login_vista.php?error=Usuario desactivado");
-            exit();
+            return "Usuario desactivado";
         }
 
         if (!password_verify($password, $usuario["passwordHash"])) {
-            header("Location: ../vista/login_vista.php?error=Contraseña incorrecta");
-          //  die("Contraseña incorrecta");
-            exit();
+            return "Contraseña incorrecta";
         }
 
         // Guardar sesión
         $_SESSION["usuario"] = $usuario["trabajadorNombre"];
         $_SESSION["idUsuario"] = $usuario["idUsuario"];
 
-        header("Location: ../Template/menu.php");
+        return true;
+    }
+
+    // Método para cerrar sesión
+    public function cerrarSesion()
+    {
+        session_unset();
+        session_destroy();
+        header("Location: ../Vista/login_vista.php");
         exit();
     }
 }
-
-$ctrl = new loginControlador();
-$ctrl->iniciarSesion();
 ?>

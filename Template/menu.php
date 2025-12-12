@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Verificar si hay usuario logueado
+if (!isset($_SESSION['idUsuario'])) {
+    // No hay sesión activa, redirigir al login
+    header("Location: ../Vista/login_vista.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,7 +36,7 @@
             <p><b>Inventario</b></p>
             <a class="nav-link" href="menu.php?page=entrada"><i class="bi-clipboard-plus"></i> Entradas</a>
              <a class="nav-link" href="menu.php?page=salidas"><i class="bi-clipboard-minus"></i> Salidas</a>
-            <a class="nav-link text-danger mt-4" href="../Controlador/login_controlador.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
+            <a class="nav-link text-danger mt-4" href="../Controlador/logout.php"><i class="bi bi-box-arrow-left"></i> Salir</a>
         </nav>
     </div>
 

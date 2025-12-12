@@ -1,6 +1,30 @@
+<?php
+require_once("../Controlador/login_controlador.php");
+
+// instanciamos el controlador
+$ctrl = new loginControlador();
+$resultado = "";
+// Manejo del POST directamente en la vista
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Guardamos los campos POST en variables
+    $username = $_POST["username"] ?? "";
+    $password = $_POST["password"] ?? "";
+
+    // Llamamos al método del controlador
+    $resultado = $ctrl->iniciarSesion($username, $password);
+
+    if ($resultado === true) {
+        header("Location: ../Template/menu.php");
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Login - Ferretería</title>
     <link rel="stylesheet" href="../style/login.css">
 </head>
@@ -10,15 +34,16 @@
 
     <h2>Iniciar Sesión</h2>
 
-    <?php if (isset($_GET["error"])): ?>
-        <div class="error"><?= htmlspecialchars($_GET["error"]) ?></div>
+    <!-- Mostrar errores si existen -->
+    <?php if ($resultado !== "" && $resultado !== true): ?>
+        <div class="error"><?= htmlspecialchars($resultado) ?></div>
     <?php endif; ?>
 
-    <form action="../Controlador/login_controlador.php" method="POST">
+    <form action="" method="POST">
 
         <div class="form-group">
             <label>Usuario:</label>
-            <input class="form-control" type="text" name="username" autocomplete="off" required>
+            <input class="form-control" type="text" name="username"   required>
         </div>
 
         <div class="form-group">
@@ -27,8 +52,6 @@
         </div>
 
         <button type="submit">Ingresar</button>
-        
-
     </form>
 
 </div>
