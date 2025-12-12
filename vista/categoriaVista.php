@@ -22,9 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
     $idEstado = $_POST["idEstado"];
 
     if ($control->guardar($nombre, $descripcion, $idEstado)) {
-  
-        echo "<script>window.location.href='menu.php?page=categorias&success=1';</script>"; exit;
-        exit;
+        header("Location: menu.php?page=categorias&success=1");
+        exit();
     }
 }
 ?>
@@ -42,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
 <h1><b>Categorias</b></h1>
 
 <input type="text" id="buscar" placeholder="Buscar producto..." autocomplete="off">
+<br>
 
 
 
