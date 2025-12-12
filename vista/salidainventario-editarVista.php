@@ -9,16 +9,11 @@ $productoCtrl = new productoControlador();
 // Obtener id
 $idSalida = $_GET["id"] ?? null;
 
-if (!$idSalida) {
-    die("ID de salida no proporcionado");
-}
+
 
 // Obtener salida y detalles
 $salida = $salidaCtrl->obtenerSalidaPorId($idSalida);
 
-if (!$salida) {
-    die("Salida no encontrada");
-}
 
 // Productos disponibles
 $productos = $productoCtrl->listar();
