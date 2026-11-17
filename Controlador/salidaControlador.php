@@ -1,5 +1,5 @@
-<?php 
-require_once("../Modelo/Salida.php");
+<?php
+require_once __DIR__ . '/../Modelo/Salida.php';
 
 class salidaControlador {
     private $modelo;
@@ -8,51 +8,49 @@ class salidaControlador {
         $this->modelo = new Salida();
     }
 
-    public function obtenerColumnasSalida() {
-        return $this->modelo->obtenerColumnasSalida();
+    public function obtenerTrabajadores() {
+        return $this->modelo->obtenerTrabajadores();
     }
 
-    public function obtenerColumnasDetalle() {
-        return $this->modelo->obtenerColumnasDetalle();
+    public function obtenerProductos() {
+        return $this->modelo->obtenerProductos();
     }
 
-    public function listarSalidasConDetalle() {
-        return $this->modelo->listarSalidasConDetalle();
+    public function listarSalidas() {
+        return $this->modelo->listarSalidasAgrupadas();
     }
 
-    public function obtenerSalidaPorId($id) {
-        return $this->modelo->obtenerSalidaConDetallePorId($id);
+    public function obtenerDetallesPorSalida($idSalida) {
+        return $this->modelo->obtenerDetallesPorSalida($idSalida);
     }
 
-   
-    public function agregar($fecha, $idTrabajador, $motivo, $detalles) {
-        $detallesFiltrados = [];
-        foreach ($detalles as $d) {
-            if (!empty($d["idProducto"]) && !empty($d["cantidad"])) {
-                $detallesFiltrados[] = $d;
+    public function guardarSalida($fecha, $idTrabajador, $motivo, $productosIds, $cantidades) {
+        $detalles = $this->prepararDetalles($productosIds, $cantidades);
+        if (empty($detalles)) return false;
+
+        return $this->modelo->registrarSalidaConDetalle($fecha, $idTrabajador, $motivo, $detalles);
+    }
+
+    public function actualizarSalida($idSalida, $fecha, $idTrabajador, $motivo, $productosIds, $cantidades) {
+        $detalles = $this->prepararDetalles($productosIds, $cantidades);
+        if (empty($detalles)) return false;
+
+        return $this->modelo->editarSalidaConDetalle($idSalida, $fecha, $idTrabajador, $motivo, $detalles);
+    }
+
+    private function prepararDetalles($productosIds, $cantidades) {
+        $detalles = [];
+        if (is_array($productosIds)) {
+            for ($i = 0; $i < count($productosIds); $i++) {
+                if (!empty($productosIds[$i]) && isset($cantidades[$i]) && $cantidades[$i] > 0) {
+                    $detalles[] = [
+                        'idProducto' => $productosIds[$i],
+                        'cantidad'   => floatval($cantidades[$i])
+                    ];
+                }
             }
         }
-
-        return $this->modelo->registrarSalidaConDetalle(
-            $fecha,
-            $idTrabajador,
-            $motivo,
-            $detallesFiltrados
-        );
-    }
-
-    public function editar($idSalida, $motivo, $detalles) {
-        $detallesFiltrados = [];
-        foreach ($detalles as $d) {
-            if (!empty($d["idProducto"]) && !empty($d["cantidad"])) {
-                $detallesFiltrados[] = $d;
-            }
-        }
-
-        return $this->modelo->editarSalidaConDetalle(
-            $idSalida,
-            $motivo,
-            $detallesFiltrados
-        );
+        return $detalles;
     }
 }
+?>

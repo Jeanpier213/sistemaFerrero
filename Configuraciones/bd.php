@@ -3,7 +3,7 @@
 class bd {
 
     private $servidor = "localhost";
-    private $basedatos = "ferreteriasantos_db";
+    private $basedatos = "bd_ferreteria_prueba";
     private $usuario = "root";
     private $clave = "";
     private $puerto = "3306";

@@ -1,5 +1,5 @@
 <?php
-require_once("../Configuraciones/bd.php");
+require_once __DIR__ . '/../Configuraciones/bd.php';
 
 class Salida {
     private $pdo;
@@ -8,128 +8,112 @@ class Salida {
         $this->pdo = (new BD())->conexion();
     }
 
-    // columnas de la tabla 'salida'
-    public function obtenerColumnasSalida() {
-        $sql = $this->pdo->query("SHOW COLUMNS FROM salida");
-        return $sql->fetchAll(PDO::FETCH_COLUMN);
+    public function obtenerTrabajadores() {
+        $sql = "SELECT e.idEmpleado, CONCAT(p.nombres, ' ', p.apellidos) as nombre 
+                FROM empleado e 
+                JOIN persona p ON e.idPersona = p.idPersona 
+                WHERE e.idEstado = 1";
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // columnas de la tabla 'detalleSalida'
-    public function obtenerColumnasDetalle() {
-        $sql = $this->pdo->query("SHOW COLUMNS FROM detalleSalida");
-        return $sql->fetchAll(PDO::FETCH_COLUMN);
+    public function obtenerProductos() {
+        $sql = "SELECT idProducto, nombre, cantidadTotal FROM producto WHERE idEstado = 1";
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // listar detalle completo con joins: salida + detalle
-   public function listarSalidasConDetalle() {
-    $sql = $this->pdo->query("
-        SELECT 
-            s.idSalida,
-            s.fecha,
-            s.motivo,
-            e.idEmpleado,
-            ds.idProducto,
-            ds.cantidad AS cantidadSalida
-        FROM salida s
-        INNER JOIN detalleSalida ds ON ds.idSalida = s.idSalida
-        INNER JOIN empleado e ON e.idEmpleado = s.idTrabajador
-        ORDER BY s.idSalida DESC, ds.idDetalleSalida ASC
-    ");
-    return $sql->fetchAll(PDO::FETCH_ASSOC);
-}
-
-
-    // método seguro para registrar salida + detalle en transacción y actualizar stock
+    // REGISTRAR NUEVA SALIDA
     public function registrarSalidaConDetalle($fecha, $idTrabajador, $motivo, $detallesArray) {
         try {
             $this->pdo->beginTransaction();
 
-            // insertar salida
             $stmt = $this->pdo->prepare("INSERT INTO salida (fecha, idTrabajador, motivo) VALUES (?, ?, ?)");
             $stmt->execute([$fecha, $idTrabajador, $motivo]);
             $idSalida = $this->pdo->lastInsertId();
 
-            // preparar statements
-            $insertDetalle = $this->pdo->prepare("INSERT INTO detalleSalida (idSalida, idProducto, cantidad) VALUES (?, ?, ?)");
+            $insertDetalle = $this->pdo->prepare("INSERT INTO detallesalida (idSalida, idProducto, cantidad) VALUES (?, ?, ?)");
             $updateProducto = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal - ? WHERE idProducto = ?");
 
             foreach ($detallesArray as $d) {
-                $idProducto = $d['idProducto'];
-                $cantidad = $d['cantidad'];
-
-                // insertar detalle
-                $insertDetalle->execute([$idSalida, $idProducto, $cantidad]);
-
-                // actualizar stock (restar)
-                $updateProducto->execute([$cantidad, $idProducto]);
+                $insertDetalle->execute([$idSalida, $d['idProducto'], $d['cantidad']]);
+                $updateProducto->execute([$d['cantidad'], $d['idProducto']]);
             }
 
             $this->pdo->commit();
-            return $idSalida;
-
+            return true;
         } catch (Exception $e) {
             $this->pdo->rollBack();
-            throw $e; // quien llame lo manejará
+            throw $e;
         }
     }
 
-    public function editarSalidaConDetalle($idSalida, $motivo, $detallesArray) {
-    try {
-        $this->pdo->beginTransaction();
+    // ACTUALIZAR SALIDA Y REAJUSTAR STOCK
+    public function editarSalidaConDetalle($idSalida, $fecha, $idTrabajador, $motivo, $detallesArray) {
+        try {
+            $this->pdo->beginTransaction();
 
-        // 1) actualizar motivo
-        $stmt = $this->pdo->prepare("UPDATE salida SET motivo = ? WHERE idSalida = ?");
-        $stmt->execute([$motivo, $idSalida]);
+            // 1) Actualizar cabecera
+            $stmt = $this->pdo->prepare("UPDATE salida SET fecha = ?, idTrabajador = ?, motivo = ? WHERE idSalida = ?");
+            $stmt->execute([$fecha, $idTrabajador, $motivo, $idSalida]);
 
-        // 2) obtener stock anterior del detalle para revertir
-        $sqlOld = $this->pdo->prepare("SELECT idProducto, cantidad FROM detalleSalida WHERE idSalida = ?");
-        $sqlOld->execute([$idSalida]);
-        $detallesPrevios = $sqlOld->fetchAll(PDO::FETCH_ASSOC);
+            // 2) Obtener stock anterior del detalle para revertir (sumar)
+            $sqlOld = $this->pdo->prepare("SELECT idProducto, cantidad FROM detallesalida WHERE idSalida = ?");
+            $sqlOld->execute([$idSalida]);
+            $detallesPrevios = $sqlOld->fetchAll(PDO::FETCH_ASSOC);
 
-        // 3) devolver stock anterior (sumar)
-        $updateStock = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal + ? WHERE idProducto = ?");
-        foreach ($detallesPrevios as $dp) {
-            $updateStock->execute([$dp['cantidad'], $dp['idProducto']]);
+            $updateStock = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal + ? WHERE idProducto = ?");
+            foreach ($detallesPrevios as $dp) {
+                $updateStock->execute([$dp['cantidad'], $dp['idProducto']]);
+            }
+
+            // 3) Eliminar detalle anterior
+            $stmtDel = $this->pdo->prepare("DELETE FROM detallesalida WHERE idSalida = ?");
+            $stmtDel->execute([$idSalida]);
+
+            // 4) Insertar nuevo detalle y restar nuevo stock
+            $stmtDetalle = $this->pdo->prepare("INSERT INTO detallesalida (idSalida, idProducto, cantidad) VALUES (?, ?, ?)");
+            $stmtStock = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal - ? WHERE idProducto = ?");
+
+            foreach ($detallesArray as $d) {
+                $stmtDetalle->execute([$idSalida, $d['idProducto'], $d['cantidad']]);
+                $stmtStock->execute([$d['cantidad'], $d['idProducto']]);
+            }
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
         }
+    }
 
-        // 4) eliminar detalle anterior
-        $stmtDel = $this->pdo->prepare("DELETE FROM detalleSalida WHERE idSalida = ?");
-        $stmtDel->execute([$idSalida]);
+    // LISTAR SALIDAS AGRUPADAS (Para el historial)
+    public function listarSalidasAgrupadas() {
+        $sql = "SELECT 
+                    s.idSalida AS id, 
+                    s.fecha, 
+                    s.motivo, 
+                    s.idTrabajador,
+                    CONCAT(p.nombres, ' ', p.apellidos) AS trabajador,
+                    SUM(ds.cantidad) AS totalProductos
+                FROM salida s
+                INNER JOIN empleado e ON s.idTrabajador = e.idEmpleado
+                INNER JOIN persona p ON e.idPersona = p.idPersona
+                LEFT JOIN detallesalida ds ON s.idSalida = ds.idSalida
+                GROUP BY s.idSalida, s.fecha, s.motivo, s.idTrabajador, p.nombres, p.apellidos
+                ORDER BY s.fecha DESC, s.idSalida DESC";
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        // 5) insertar nuevo detalle
-        $stmtDetalle = $this->pdo->prepare("INSERT INTO detalleSalida (idSalida, idProducto, cantidad) VALUES (?, ?, ?)");
-        $stmtStock = $this->pdo->prepare("UPDATE producto SET cantidadTotal = cantidadTotal - ? WHERE idProducto = ?");
-
-        foreach ($detallesArray as $d) {
-            $stmtDetalle->execute([$idSalida, $d['idProducto'], $d['cantidad']]);
-            $stmtStock->execute([$d['cantidad'], $d['idProducto']]);
-        }
-
-        $this->pdo->commit();
-        return true;
-
-    } catch (Exception $e) {
-        $this->pdo->rollBack();
-        throw $e;
+    // OBTENER DETALLES DE UNA SALIDA ESPECÍFICA (Para el modal de edición)
+    public function obtenerDetallesPorSalida($idSalida) {
+        $sql = $this->pdo->prepare("
+            SELECT ds.idDetalleSalida, ds.idProducto, ds.cantidad, p.nombre 
+            FROM detallesalida ds
+            INNER JOIN producto p ON ds.idProducto = p.idProducto
+            WHERE ds.idSalida = ?
+        ");
+        $sql->execute([$idSalida]);
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-public function obtenerSalidaConDetallePorId($idSalida) {
-    $sql = $this->pdo->prepare("
-        SELECT 
-            s.idSalida,
-            s.fecha,
-            s.motivo,
-            s.idTrabajador,
-            ds.idDetalleSalida,
-            ds.idProducto,
-            ds.cantidad
-        FROM salida s
-        INNER JOIN detalleSalida ds ON ds.idSalida = s.idSalida
-        WHERE s.idSalida = ?
-        ORDER BY ds.idDetalleSalida ASC
-    ");
-    $sql->execute([$idSalida]);
-    return $sql->fetchAll(PDO::FETCH_ASSOC);
-}
-
-}
+?>

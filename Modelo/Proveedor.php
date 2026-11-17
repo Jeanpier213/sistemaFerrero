@@ -8,11 +8,11 @@ class Proveedor {
         $this->pdo = (new BD())->conexion();
     }
 
-    // LISTAR (Unimos Proveedor con Persona para ver nombre del contacto)
+    // LISTAR (Incluye pr.idPersona y p.dni requeridos para la vista y edición)
     public function listar() {
         $sql = $this->pdo->prepare("
-            SELECT pr.idProveedor, pr.razonSocial, pr.ruc, pr.direccion, pr.tipoProductos, pr.idEstado,
-                p.nombres, p.apellidos, p.telefono, p.email
+            SELECT pr.idProveedor, pr.idPersona, pr.razonSocial, pr.ruc, pr.direccion, pr.tipoProductos, pr.idEstado,
+                   p.nombres, p.apellidos, p.dni, p.telefono, p.email
             FROM proveedor pr
             INNER JOIN persona p ON pr.idPersona = p.idPersona
         ");
@@ -46,7 +46,7 @@ class Proveedor {
     public function obtenerUno($id) {
         $sql = $this->pdo->prepare("
             SELECT pr.idProveedor, pr.idPersona, pr.razonSocial, pr.ruc, pr.direccion, pr.tipoProductos, pr.idEstado,
-                p.nombres, p.apellidos, p.dni, p.telefono, p.email
+                   p.nombres, p.apellidos, p.dni, p.telefono, p.email
             FROM proveedor pr
             INNER JOIN persona p ON pr.idPersona = p.idPersona
             WHERE pr.idProveedor = ?
@@ -62,6 +62,7 @@ class Proveedor {
             // Actualizar Persona
             $sqlP = $this->pdo->prepare("UPDATE persona SET nombres=?, apellidos=?, dni=?, telefono=?, email=? WHERE idPersona=?");
             $sqlP->execute([$nombres, $apellidos, $dni, $telefono, $email, $idPersona]);
+            
             // Actualizar Proveedor
             $sqlPr = $this->pdo->prepare("UPDATE proveedor SET razonSocial=?, ruc=?, direccion=?, tipoProductos=?, idEstado=? WHERE idProveedor=?");
             $sqlPr->execute([$razonSocial, $ruc, $direccion, $tipoProd, $idEstado, $idProveedor]);
@@ -84,12 +85,13 @@ class Proveedor {
     public function buscar($texto) {
         $texto = "%$texto%";
         $sql = $this->pdo->prepare("
-            SELECT pr.idProveedor, pr.razonSocial, pr.ruc, pr.tipoProductos, pr.idEstado, p.nombres 
+            SELECT pr.idProveedor, pr.idPersona, pr.razonSocial, pr.ruc, pr.tipoProductos, pr.idEstado, 
+                   p.nombres, p.apellidos, p.dni, p.telefono, p.email
             FROM proveedor pr
             INNER JOIN persona p ON pr.idPersona = p.idPersona
-            WHERE pr.razonSocial LIKE ? OR pr.ruc LIKE ?
+            WHERE pr.razonSocial LIKE ? OR pr.ruc LIKE ? OR p.nombres LIKE ? OR p.dni LIKE ?
         ");
-        $sql->execute([$texto, $texto]);
+        $sql->execute([$texto, $texto, $texto, $texto]);
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 }

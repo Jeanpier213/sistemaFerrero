@@ -11,7 +11,6 @@ class loginControlador
         $this->modelo = new Usuario();
     }
 
-   
     public function iniciarSesion($username, $password)
     {
         if (!$username || !$password) {
@@ -28,16 +27,34 @@ class loginControlador
             return "Usuario desactivado";
         }
 
-        if (!password_verify($password, $usuario["passwordHash"])) {
+        $hashGuardado = $usuario["passwordHash"];
+        $accesoConcedido = false;
+
+        // 1. Si la contraseña en la BD empieza con "$2y$", está encriptada
+        if (strpos($hashGuardado, '$2y$') === 0) {
+            if (password_verify($password, $hashGuardado)) {
+                $accesoConcedido = true;
+            }
+        } 
+        // 2. Si no, asumimos que es texto plano (como "admin123")
+        else {
+            if ($password === $hashGuardado) {
+                $accesoConcedido = true;
+            }
+        }
+
+        // 3. Validar si falló el acceso
+        if (!$accesoConcedido) {
             return "Contraseña incorrecta";
         }
 
-        $_SESSION["usuario"] = $usuario["trabajadorNombre"];
+        // 4. Crear las sesiones correctamente (usamos username en lugar de trabajadorNombre)
+        $_SESSION["usuario"] = $usuario["username"]; 
         $_SESSION["idUsuario"] = $usuario["idUsuario"];
+        $_SESSION["idTrabajador"] = $usuario["idTrabajador"]; // Opcional, pero útil
 
         return true;
     }
-
 
     public function cerrarSesion()
     {
