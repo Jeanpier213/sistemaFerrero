@@ -2,7 +2,12 @@
 session_start();
 
 if (!isset($_SESSION['idUsuario'])) {
+<<<<<<< HEAD
     header("Location: ../vista/login_vista.php");
+=======
+  
+    header("Location: ../Vista/login_vista.php");
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
     exit();
 }
 ?>

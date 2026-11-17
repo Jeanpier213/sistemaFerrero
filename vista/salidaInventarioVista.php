@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../Controlador/salidaControlador.php';
 
+<<<<<<< HEAD
 $control = new salidaControlador();
 
 $trabajadores   = $control->obtenerTrabajadores();
@@ -13,10 +14,31 @@ foreach ($historialBase as $h) {
     $h['detalles'] = $control->obtenerDetallesPorSalida($h['id']);
     $historialCompleto[] = $h;
 }
+=======
+
+$salidaCtrl = new salidaControlador();
+$productoCtrl = new productoControlador();
+$empleadoCtrl = new empleadoControlador();
+
+
+$columnasSalida = $salidaCtrl->obtenerColumnasSalida();
+$columnasDetalle = $salidaCtrl->obtenerColumnasDetalle();
+$productos = $productoCtrl->listar();
+$empleados = $empleadoCtrl->listar();
+$salidas = $salidaCtrl->listarSalidasConDetalle();
+
+
+if (isset($_POST['fecha'])) {
+    $fecha        = $_POST['fecha'];
+    $idTrabajador = $_POST['idTrabajador'];
+    $motivo       = $_POST['motivo'];
+    $detalles     = $_POST['detalle'];
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
 
 $mensaje     = "";
 $tipoMensaje = "";
 
+<<<<<<< HEAD
 // PROCESAR GUARDAR
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guardar"])) {
     try {
@@ -73,6 +95,14 @@ if (isset($_GET['msg'])) {
     } elseif ($_GET['msg'] == 'exito_edit') {
         $mensaje = "Salida de productos actualizada exitosamente.";
         $tipoMensaje = "success";
+=======
+    if ($ok) {
+        echo "<p>Salida registrada correctamente.</p>";
+      
+        $salidas = $salidaCtrl->listarSalidasConDetalle();
+    } else {
+        echo "<p>Error al registrar la salida.</p>";
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
     }
 }
 ?>
@@ -426,6 +456,7 @@ function eliminarFilaEdit(btn) {
     }
 }
 
+<<<<<<< HEAD
 document.getElementById('inputBuscarHistorial').addEventListener('keyup', function() {
     let valor = this.value.toLowerCase();
     let filas = document.querySelectorAll('#tablaHistorial tbody tr');
@@ -436,3 +467,40 @@ document.getElementById('inputBuscarHistorial').addEventListener('keyup', functi
     });
 });
 </script>
+=======
+<h2>Listado Completo de Salidas</h2>
+
+<?php 
+unset($columnasSalida[0]);
+unset($columnasDetalle[0]);
+unset($columnasDetalle[1]);
+?>
+
+<table border="1">
+    <tr>
+        <?php foreach ($columnasSalida as $col): ?>
+            <th><?= $col ?></th>
+        <?php endforeach; ?>
+        <?php foreach ($columnasDetalle as $col): ?>
+            <th><?= $col ?></th>
+        <?php endforeach; ?>
+        <th>Acciones</th>
+    </tr>
+
+    <?php foreach ($salidas as $s): ?>
+        <tr>
+            <td><?= $s['fecha'] ?></td>
+            <td><?= $s['idEmpleado'] ?></td>
+            <td><?= $s['motivo'] ?></td>
+            <td><?= $s['idProducto'] ?></td>
+            <td><?= $s['cantidadSalida'] ?></td>
+            <td>
+                <a href="menu.php?page=editar_salidas&id=<?= $s['idSalida'] ?>">Editar</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+</body>
+</html>
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9

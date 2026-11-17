@@ -5,9 +5,14 @@ require_once '../Controlador/empleadoControlador.php';
 $controladorUser = new UsuarioControlador();
 $controladorEmp  = new EmpleadoControlador();
 
+<<<<<<< HEAD
 // Obtener listas
 $usuarios  = $controladorUser->listar() ?? [];
 $empleados = method_exists($controladorEmp, 'listar') ? ($controladorEmp->listar() ?? []) : [];
+=======
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
 
 // PROCESAR GUARDAR NUEVO USUARIO
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['btn_guardar'])) {
@@ -15,11 +20,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['btn_guardar'])) {
     $username     = $_POST['usuario'];
     $clave        = $_POST['clave'];
 
+<<<<<<< HEAD
     $resultado = $controladorUser->registrar($idTrabajador, $username, $clave);
     
     if ($resultado === "exito") {
         echo "<script>window.location.href='menu.php?page=usuarios&success=1';</script>";
         exit;
+=======
+    if ($password === $confirm) {
+        $resultado = $control->registrar($idTrabajador, $username, $password);
+
+        if ($resultado === "exito") {
+          
+            header("Location: menu.php?page=usuarios");
+            echo "
+                    alert('Usuario creado con éxito. Ahora inicia sesión.');
+                    window.location.href='menu.php?page=usuarios'; 
+                ";
+            exit;
+        } elseif ($resultado === "user_existe") {
+            $mensaje = "El usuario ya existe.";
+        } elseif ($resultado === "trabajador_no_existe") {
+            $mensaje = "El ID de trabajador no es válido.";
+        } else {
+            $mensaje = "Error al registrar.";
+        }
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
     } else {
         echo "<script>alert('Error al registrar usuario: " . $resultado . "');</script>";
     }

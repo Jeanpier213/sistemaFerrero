@@ -155,6 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['btn_editar'])) {
     </div>
 </div>
 
+<<<<<<< HEAD
 <!-- MODAL: REGISTRAR NUEVO EMPLEADO -->
 <div class="modal fade" id="modalNuevo" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -257,6 +258,57 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['btn_editar'])) {
     </div>
 </div>
 
+=======
+<br>
+
+<div>
+    <table id="tablaEmpleados" border="1">
+        <?php if (!empty($lista)): ?>
+            
+            <tr>
+                <?php 
+                $columnas = array_keys($lista[0]); 
+                foreach ($columnas as $col):    
+                    if ($col != 'idEstado') { 
+                ?>
+                    <th><?= $col ?></th>
+                <?php 
+                    } 
+                endforeach; 
+                ?>                
+                <th>Estado</th>
+            </tr>
+            <?php foreach ($lista as $fila): ?>
+                <tr>          
+                    <td>
+                        <a href="menu.php?page=editar_empleado&id=<?= $fila['idEmpleado'] ?>">
+                            <?= $fila['idEmpleado'] ?>
+                        </a>
+                    </td>
+                    <?php                        
+                        foreach (array_slice($fila, 1, null, true) as $key => $valor): 
+                            if ($key != 'idEstado'):
+                    ?>
+                        <td><?= $valor ?></td>
+                    <?php 
+                            endif;
+                        endforeach; 
+                    ?>
+
+                    <td>
+                        <?= ($fila['idEstado'] == 1) ? 'Activo' : 'Inactivo' ?>
+                    </td>
+
+                </tr>
+            <?php endforeach; ?>
+            
+        <?php else: ?>
+            <p>No hay empleados registrados.</p>
+        <?php endif; ?>
+    </table>
+</div>
+
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
 <script>
 function cargarDatosEdicion(idEmpleado, idPersona, nombres, apellidos, dni, telefono, email, tipo, idEstado) {
     document.getElementById('e_idEmpleado').value = idEmpleado;

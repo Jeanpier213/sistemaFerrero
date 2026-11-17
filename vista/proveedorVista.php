@@ -2,6 +2,7 @@
 require_once "../Controlador/ProveedorControlador.php";
 $control = new ProveedorControlador();
 
+<<<<<<< HEAD
 // PROCESAR GUARDAR NUEVO PROVEEDOR
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['btn_guardar'])) {
     $nombres       = $_POST["nombres"] ?? '';
@@ -13,6 +14,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['btn_guardar'])) {
     $ruc           = $_POST["ruc"] ?? '';
     $direccion     = $_POST["direccion"] ?? '';
     $tipoProductos = $_POST["tipoProductos"] ?? '';
+=======
+$lista = $control->listar();
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["razonSocial"])) {
+
+    $nombres = $_POST["nombres"];
+    $apellidos = $_POST["apellidos"];
+    $dni = $_POST["dni"]; 
+    $telefono = $_POST["telefono"];
+    $email = $_POST["email"]; 
+    
+    $razonSocial = $_POST["razonSocial"];
+    $ruc = $_POST["ruc"];
+    $direccion = $_POST["direccion"];
+    $tipoProductos = $_POST["tipoProductos"];
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
 
     if ($control->guardar($nombres, $apellidos, $dni, $telefono, $email, $razonSocial, $ruc, $direccion, $tipoProductos)) {
         echo "<script>window.location.href='menu.php?page=proveedor&success=1';</script>";

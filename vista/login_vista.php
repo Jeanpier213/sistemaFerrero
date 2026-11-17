@@ -7,10 +7,18 @@ $resultado = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+<<<<<<< HEAD
     $username = $_POST["username"] ?? "";
     $password = $_POST["password"] ?? "";
 
    
+=======
+    
+    $username = $_POST["username"] ?? "";
+    $password = $_POST["password"] ?? "";
+
+  
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
     $resultado = $ctrl->iniciarSesion($username, $password);
 
     if ($resultado === true) {
@@ -33,7 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <h2>Iniciar Sesión</h2>
 
+<<<<<<< HEAD
     
+=======
+ 
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
     <?php if ($resultado !== "" && $resultado !== true): ?>
         <div class="error"><?= htmlspecialchars($resultado) ?></div>
     <?php endif; ?>

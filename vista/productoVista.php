@@ -10,12 +10,35 @@ $productos = $controladorProd->listar() ?? [];
 // Asumimos que tu controlador de categorías tiene un método listar()
 $categorias = method_exists($controladorCat, 'listar') ? $controladorCat->listar() : [];
 
+<<<<<<< HEAD
 // Función auxiliar para buscar el nombre de la categoría por su ID
 function obtenerNombreCategoria($idCategoria, $listaCategorias) {
     foreach ($listaCategorias as $cat) {
         $id = $cat['idCategoria'] ?? $cat['id'] ?? '';
         $nombre = $cat['nombre'] ?? $cat['descripcion'] ?? 'Categoría ' . $idCategoria;
         if ($id == $idCategoria) return $nombre;
+=======
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
+
+    $nombre = $_POST["nombre"];
+    $unidadMedida = $_POST["unidadMedida"];
+    $tipo = $_POST["tipo"];
+    $cantidadTotal = $_POST["cantidadTotal"];
+    $fechaCaducidad = $_POST["fechaCaducidad"];
+    $precioReferencial = $_POST["precioReferencial"];
+    $precioVenta = $_POST["precioVenta"];
+    $umbralMinimo = $_POST["umbralMinimo"];
+    $idCategoria = $_POST["idCategoria"];
+    
+    
+    $idEstado = 1; 
+
+    if ($control->guardar($nombre, $unidadMedida, $tipo, $cantidadTotal, $fechaCaducidad, $precioReferencial, $precioVenta, $umbralMinimo, $idCategoria, $idEstado)) {
+        header("Location: menu.php?page=productos&success=1");  
+        
+        exit;
+>>>>>>> 6330b431f5a3e7aa076485058d7a82635ff7fce9
     }
     return 'Categoría ' . $idCategoria;
 }
